@@ -192,9 +192,6 @@ echo "$azure_publicip";
       </tr>
     </table>
 
-    <p>This is the home page for the iperf3 test on Azure VM</p>
-    <p>Launch the command line from your client: </p>
-    <p>     iperf3 -c $azure_hostname -p 5201 --parallel 32  </p> 
     <ul>
       <li>To <a href="http://www.microsoft.com">Microsoft</a>
       <li>To <a href="https://portal.azure.com">Azure</a>
