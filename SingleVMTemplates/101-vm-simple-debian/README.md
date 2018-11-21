@@ -1,4 +1,4 @@
-# Very simple deployment of an Debian VM running Apache (port 80) and iperf3 (port 5201)
+# Very simple deployment of a Debian VM
 
 <a href="https://portal.azure.com/#create/Microsoft.Template/uri/https%3A%2F%2Fraw.githubusercontent.com%2Fflecoqui%2FARMStepByStep%2Fmaster%2FSingleVMTemplates%2F101-vm-simple-debian%2Fazuredeploy.json" target="_blank">
     <img src="http://azuredeploy.net/deploybutton.png"/>
@@ -13,6 +13,7 @@ With Azure CLI you can deploy this VM with 2 command lines:
 
 ## CREATE RESOURCE GROUP:
 **Azure CLI:** azure group create "ResourceGroupName" "RegionName"
+
 **Azure CLI 2.0:** az group create –n "ResourceGroupName" -l "RegionName"
 
 For instance:
@@ -23,6 +24,7 @@ For instance:
 
 ## DEPLOY THE VM:
 **Azure CLI:** azure group deployment create "ResourceGroupName" "DeploymentName"  -f azuredeploy.json -e azuredeploy.parameters.json*
+
 **Azure CLI 2.0:** az group deployment create -g "ResourceGroupName" -n "DeploymentName" --template-file "templatefile.json" --parameters @"templatefile.parameter..json"  --verbose
 
 For instance:
@@ -33,6 +35,7 @@ For instance:
 
 ## DELETE THE RESOURCE GROUP:
 **Azure CLI:** azure group delete "ResourceGroupName" "RegionName"
+
 **Azure CLI 2.0:** az group delete --name "ResourceGroupName" "RegionName"
 
 For instance:
