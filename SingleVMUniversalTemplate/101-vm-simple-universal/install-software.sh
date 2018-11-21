@@ -238,103 +238,20 @@ configure_network(){
 # firewall configuration 
 iptables -A INPUT -p tcp --dport 80 -j ACCEPT
 iptables -A INPUT -p tcp --dport 443 -j ACCEPT
-iptables -A INPUT -p tcp --dport 5201 -j ACCEPT
-iptables -A INPUT -p udp --dport 5201 -j ACCEPT
 }
 #############################################################################
 configure_network_centos(){
 # firewall configuration 
 iptables -A INPUT -p tcp --dport 80 -j ACCEPT
 iptables -A INPUT -p tcp --dport 443 -j ACCEPT
-iptables -A INPUT -p tcp --dport 5201 -j ACCEPT
-iptables -A INPUT -p udp --dport 5201 -j ACCEPT
 
 service firewalld start
-firewall-cmd --permanent --add-port=5201/tcp
-firewall-cmd --permanent --add-port=5201/udp
 firewall-cmd --permanent --add-port=80/tcp
 firewall-cmd --permanent --add-port=443/tcp
 firewall-cmd --reload
 }
-#############################################################################
-configure_iperf(){
-#
-# install iperf3
-#  
-apt-get remove iperf3 libiperf0
-wget https://iperf.fr/download/ubuntu/libiperf0_3.1.3-1_amd64.deb
-wget https://iperf.fr/download/ubuntu/iperf3_3.1.3-1_amd64.deb
-dpkg -i libiperf0_3.1.3-1_amd64.deb iperf3_3.1.3-1_amd64.deb
-rm libiperf0_3.1.3-1_amd64.deb iperf3_3.1.3-1_amd64.deb
-
-adduser iperf --disabled-login
-cat <<EOF > /etc/systemd/system/iperf3.service
-[Unit]
-Description=iperf3 Service
-After=network.target
-
-[Service]
-Type=simple
-User=iperf
-ExecStart=/usr/bin/iperf3 -s
-Restart=on-abort
 
 
-[Install]
-WantedBy=multi-user.target
-EOF
-
-
-}
-#############################################################################
-configure_iperf_centos(){
-#
-# install iperf3
-#  
-yum -y install libc.so.6
-rpm -ivh https://iperf.fr/download/fedora/iperf3-3.1.3-1.fc24.x86_64.rpm
-
-adduser iperf -s /sbin/nologin
-cat <<EOF > /etc/systemd/system/iperf3.service
-[Unit]
-Description=iperf3 Service
-After=network.target
-
-[Service]
-Type=simple
-User=iperf
-ExecStart=/usr/bin/iperf3 -s
-Restart=on-abort
-
-
-[Install]
-WantedBy=multi-user.target
-EOF
-}
-#############################################################################
-configure_iperf_ubuntu_14(){
-#
-# install iperf3
-#  
-apt-get -y remove iperf3 libiperf0
-wget https://iperf.fr/download/ubuntu/libiperf0_3.1.3-1_amd64.deb
-wget https://iperf.fr/download/ubuntu/iperf3_3.1.3-1_amd64.deb
-dpkg -i libiperf0_3.1.3-1_amd64.deb iperf3_3.1.3-1_amd64.deb
-rm libiperf0_3.1.3-1_amd64.deb iperf3_3.1.3-1_amd64.deb
-
-adduser iperf --disabled-login
-cat <<EOF > /etc/init/iperf3.conf
-# iperf3.conf
-start on filesystem
-script    
-    /usr/bin/iperf3 -s
-    echo "iperf3 started"
-end script
-EOF
-
-ln -s /etc/init/iperf3.conf /etc/init.d/iperf3
-
-}
 #############################################################################
 start_apache(){
 apachectl restart
@@ -345,15 +262,7 @@ systemctl restart httpd
 systemctl enable httpd
 systemctl status httpd
 }
-#############################################################################
-start_iperf(){
-systemctl enable iperf3
-systemctl start iperf3  
-}
-#############################################################################
-start_iperf_ubuntu_14(){
-service iperf3 start
-}
+
 #############################################################################
 
 environ=`env`
@@ -386,23 +295,6 @@ else
 	    log "configure apache"
 		configure_apache
 	fi
-    if [ $isubuntu -eq 0 ] && [ "$VER" = "14" ]; then
-      log "configure iperf for ubuntu 14"
-      configure_iperf_ubuntu_14
-      log "start iperf for ubuntu 14"
-      start_iperf_ubuntu_14
-    else
-      log "configure iperf"
-      if [ $iscentos -eq 0 ] ; then
-			configure_iperf_centos
-	  elif [ $isredhat -eq 0 ] ; then
-			configure_iperf_centos
-      else
-			configure_iperf
-	  fi
-      log "start iperf"
-      start_iperf
-    fi
     log "start apache"
       if [ $iscentos -eq 0 ] ; then
 	    start_apache_centos

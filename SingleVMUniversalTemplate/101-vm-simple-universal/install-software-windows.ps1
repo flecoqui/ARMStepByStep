@@ -69,26 +69,6 @@ function Expand-ZIPFile($file, $destination)
         $shell.Namespace($destination).copyhere($item, 0x14) 
     } 
 } 
-WriteDateLog
-WriteLog "Downloading iperf3" 
-$url = 'https://iperf.fr/download/windows/iperf-3.1.3-win64.zip' 
-$EditionId = (Get-ItemProperty -Path 'HKLM:\SOFTWARE\Microsoft\Windows NT\CurrentVersion' -Name 'EditionID').EditionId
-if (($EditionId -eq "ServerStandardNano") -or
-    ($EditionId -eq "ServerDataCenterNano") -or
-    ($EditionId -eq "NanoServer") -or
-    ($EditionId -eq "ServerTuva")) {
-	DownloadAndUnzip $url $source 
-	WriteLog "iperf3 Installed" 
-}
-else
-{
-	$webClient = New-Object System.Net.WebClient  
-	$webClient.DownloadFile($url,$source + "\iperf3.zip" )  
-	WriteLog "Installing iperf3"  
-	# Function to unzip file contents 
-	Expand-ZIPFile -file "$source\iperf3.zip" -destination $source 
-	WriteLog "iperf3 Installed" 
-}
 function Install-IIS
 {
 WriteLog "Install-PackageProvider -Name NuGet -MinimumVersion 2.8.5.201 -Force"
@@ -119,8 +99,6 @@ WriteLog "Installing IIS: done"
 WriteLog "Configuring firewall" 
 function Add-FirewallRulesNano
 {
-New-NetFirewallRule -Name "IPERFUDP" -DisplayName "IPERF on UDP/5201" -Protocol UDP -LocalPort 5201 -Action Allow -Enabled True
-New-NetFirewallRule -Name "IPERFTCP" -DisplayName "IPERF on TCP/5201" -Protocol TCP -LocalPort 5201 -Action Allow -Enabled True
 New-NetFirewallRule -Name "HTTP" -DisplayName "HTTP" -Protocol TCP -LocalPort 80 -Action Allow -Enabled True
 New-NetFirewallRule -Name "HTTPS" -DisplayName "HTTPS" -Protocol TCP -LocalPort 443 -Action Allow -Enabled True
 New-NetFirewallRule -Name "WINRM1" -DisplayName "WINRM TCP/5985" -Protocol TCP -LocalPort 5985 -Action Allow -Enabled True
@@ -128,8 +106,6 @@ New-NetFirewallRule -Name "WINRM2" -DisplayName "WINRM TCP/5986" -Protocol TCP -
 }
 function Add-FirewallRules
 {
-New-NetFirewallRule -Name "IPERFUDP" -DisplayName "IPERF on UDP/5201" -Protocol UDP -LocalPort 5201 -Action Allow -Enabled True
-New-NetFirewallRule -Name "IPERFTCP" -DisplayName "IPERF on TCP/5201" -Protocol TCP -LocalPort 5201 -Action Allow -Enabled True
 New-NetFirewallRule -Name "HTTP" -DisplayName "HTTP" -Protocol TCP -LocalPort 80 -Action Allow -Enabled True
 New-NetFirewallRule -Name "HTTPS" -DisplayName "HTTPS" -Protocol TCP -LocalPort 443 -Action Allow -Enabled True
 New-NetFirewallRule -Name "RDP" -DisplayName "RDP TCP/3389" -Protocol TCP -LocalPort 3389 -Action Allow -Enabled True
@@ -191,10 +167,6 @@ $content = @'
         </td>
       </tr>
     </table>
-
-    <p>This is the home page for the iperf3 test on Azure VM</p>
-    <p>Launch the command line from your client: </p>
-    <p>     iperf3 -c {0} -p 5201 --parallel 32  </p>
     <ul>
       <li>To <a href="http://www.microsoft.com">Microsoft</a>
       <li>To <a href="https://portal.azure.com">Azure</a>
@@ -211,10 +183,7 @@ $content | Out-File -FilePath C:\inetpub\wwwroot\index.html -Encoding utf8
 WriteLog "Creating Home Page done" 
 WriteLog "Starting IIS" 
 net start w3svc
-
-WriteLog "Installing IPERF3 as a service" 
-sc.exe create ipef3 binpath= "cmd.exe /c c:\source\iperf-3.1.3-win64\iperf3.exe -s -D" type= own start= auto DisplayName= "IPERF3"
-WriteLog "IPERF3 Installed" 
+ 
 
 WriteLog "Initialization completed !" 
 WriteLog "Rebooting !" 

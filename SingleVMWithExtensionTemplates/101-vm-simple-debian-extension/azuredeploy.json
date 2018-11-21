@@ -302,10 +302,6 @@
     "httpClient": {
       "type": "string",
       "value": "[concat('http://', parameters('dnsLabelPrefix'), '.', resourceGroup().location, '.cloudapp.azure.com')]"
-    },
-    "iperf3client": {
-      "type": "string",
-      "value": "[concat('iperf3 -c ', parameters('dnsLabelPrefix'), '.', resourceGroup().location, '.cloudapp.azure.com -p 5201 --parallel 32') ]"
     }
   }
 }

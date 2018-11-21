@@ -25,23 +25,23 @@ For instance:
 ## DEPLOY THE VM:
 **Azure CLI:** azure group deployment create "ResourceGroupName" "DeploymentName"  -f azuredeploy.json -e azuredeploy.parameters.json*
 
-**Azure CLI 2.0:** az group deployment create -g "ResourceGroupName" -n "DeploymentName" --template-file "templatefile.json" --parameters @"templatefile.parameter..json"  --verbose
+**Azure CLI 2.0:** az group deployment create -g "ResourceGroupName" -n "DeploymentName" --template-file "templatefile.json" --parameters @"templatefile.parameter..json"  --verbose -o json
 
 For instance:
 
     azure group deployment create simplevmrg simplevmtest -f azuredeploy.json -e azuredeploy.parameters.json -vv
 
-    az group deployment create -g simplevmrg -n simplevmtest --template-file azuredeploy.json --parameter @azuredeploy.parameters.json --verbose
+    az group deployment create -g simplevmrg -n simplevmtest --template-file azuredeploy.json --parameter @azuredeploy.parameters.json --verbose -o json
 
 ## DELETE THE RESOURCE GROUP:
 **Azure CLI:** azure group delete "ResourceGroupName" "RegionName"
 
-**Azure CLI 2.0:** az group delete --name "ResourceGroupName" "RegionName"
+**Azure CLI 2.0:** az group delete -n "ResourceGroupName" "RegionName"
 
 For instance:
 
     azure group delete simplevmrg eastus2
 	
-    az group delete --name simplevmrg 
+    az group delete -n simplevmrg 
 
 
