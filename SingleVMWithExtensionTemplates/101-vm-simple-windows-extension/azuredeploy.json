@@ -1,0 +1,395 @@
+{
+  "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+  "contentVersion": "1.0.0.0",
+  "parameters": {
+    "adminUsername": {
+      "type": "string",
+      "metadata": {
+        "description": "User name for the Virtual Machine."
+      }
+    },
+    "adminPassword": {
+      "type": "securestring",
+      "metadata": {
+        "description": "Password for the Virtual Machine."
+      }
+    },
+    "dnsLabelPrefix": {
+      "type": "string",
+      "defaultValue": "iperfwinvm001",
+      "metadata": {
+        "description": "Unique DNS Name for the Public IP used to access the Virtual Machine. DNS name: <dnsLabelPrefix>.<Region>.cloudapp.azure.com"
+      }
+    },
+    "osVersion": {
+      "type": "string",
+      "metadata": {
+        "description": "OS Version - Image SKU"
+      },
+      "defaultValue": "2016-Datacenter",
+      "allowedValues": [
+        "2008-R2-SP1",
+        "2012-Datacenter",
+        "2012-R2-Datacenter",
+        "2016-Datacenter"
+      ]
+    },
+    "vmSize": {
+      "type": "string",
+      "metadata": {
+        "description": "VM Size"
+      },
+      "defaultValue": "Standard_D1_v2"
+    },
+    "initscriptUrl": {
+      "type": "string",
+      "defaultValue": "https://raw.githubusercontent.com/flecoqui/azure/master/azure-quickstart-templates/101-vm-simple-windows-iperf/install-iperf-test.ps1"
+    },
+    "initScriptFileName": {
+      "type": "string",
+      "metadata": {
+        "description": "powershell.exe -ExecutionPolicy Unrestricted -File [initScriptFileName]. Logs in this file /var/lib/waagent/Microsoft.OSTCExtensions.CustomScriptForLinux-1.5.2.0/download/0/stdout"
+      },
+      "defaultValue": "install-iperf-test.ps1"
+    },
+    "modulesUrl": { 
+       "type": "string", 
+      "defaultValue": "https://raw.githubusercontent.com/flecoqui/azure/master/azure-quickstart-templates/101-vm-simple-windows-iperf/iperfWebSite.zip",
+       "metadata": { 
+         "description": "URL for the DSC configuration module. NOTE: Can be a Github url(raw) to the zip file" 
+       } 
+     }, 
+    "configurationFunction": { 
+       "type": "string", 
+       "defaultValue": "iperfWebsite.ps1\\iperfWebsite", 
+       "metadata": { 
+         "description": "DSC configuration function to call" 
+       } 
+     } 
+     
+  },
+  "variables": {
+    "storageAccountName": "[concat(parameters('dnsLabelPrefix'), 'storage')]",
+    "networkSecurityGroupName": "[concat(parameters('dnsLabelPrefix'), 'nsg')]",
+    "dataDisk1VhdName": "[concat(parameters('dnsLabelPrefix'), 'datadisk')]",
+    "imagePublisher": "MicrosoftWindowsServer", 
+    "imageOffer": "WindowsServer", 
+    "imageSKU": "2016-Datacenter-Server-Core", 
+    "OSDiskName": "[concat(parameters('dnsLabelPrefix'), 'osdisk')]",
+    "nicName": "[concat(parameters('dnsLabelPrefix'), 'nic')]",
+    "addressPrefix": "10.0.0.0/16",
+    "subnetName": "[concat(parameters('dnsLabelPrefix'), 'subnet')]",
+    "subnetPrefix": "10.0.0.0/24",
+    "storageAccountType": "Standard_LRS",
+    "publicIPAddressName": "[concat(parameters('dnsLabelPrefix'), 'ip')]",
+    "publicIPAddressType": "Dynamic",
+    "vmStorageAccountContainerName": "vhds",
+    "vmName": "[concat(parameters('dnsLabelPrefix'), 'vm')]",
+    "vmSize": "Standard_A1",
+    "virtualNetworkName": "[concat(parameters('dnsLabelPrefix'), 'vnet')]",
+    "vnetID": "[resourceId('Microsoft.Network/virtualNetworks',variables('virtualNetworkName'))]",
+    "subnetRef": "[concat(variables('vnetID'),'/subnets/',variables('subnetName'))]",
+    "apiVersion": "2015-06-15"
+  },
+  "resources": [
+    {
+      "type": "Microsoft.Storage/storageAccounts",
+      "name": "[variables('storageAccountName')]",
+      "apiVersion": "[variables('apiVersion')]",
+      "location": "[resourceGroup().location]",
+      "properties": {
+        "accountType": "[variables('storageAccountType')]"
+      }
+    },
+    { 
+       "apiVersion": "[variables('apiVersion')]", 
+       "type": "Microsoft.Network/networkSecurityGroups", 
+       "name": "[variables('networkSecurityGroupName')]", 
+       "location": "[resourceGroup().location]", 
+       "properties": { 
+         "securityRules": [ 
+           { 
+             "name": "RDP", 
+             "properties": { 
+               "description": "RDP", 
+               "protocol": "Tcp", 
+               "sourcePortRange": "*", 
+               "destinationPortRange": "3389", 
+               "sourceAddressPrefix": "*", 
+               "destinationAddressPrefix": "*", 
+               "access": "Allow", 
+               "priority": 100, 
+               "direction": "Inbound" 
+             } 
+           }, 
+           { 
+             "name": "http", 
+             "properties": { 
+               "description": "http server port", 
+               "protocol": "Tcp", 
+               "sourcePortRange": "*", 
+               "destinationPortRange": "80", 
+               "sourceAddressPrefix": "Internet", 
+               "destinationAddressPrefix": "*", 
+               "access": "Allow", 
+               "priority": 101, 
+               "direction": "Inbound" 
+             } 
+           },
+           { 
+             "name": "https", 
+             "properties": { 
+               "description": "https server port", 
+               "protocol": "Tcp", 
+               "sourcePortRange": "*", 
+               "destinationPortRange": "443", 
+               "sourceAddressPrefix": "Internet", 
+               "destinationAddressPrefix": "*", 
+               "access": "Allow", 
+               "priority": 102, 
+               "direction": "Inbound" 
+             } 
+           },
+           { 
+             "name": "winrm1", 
+             "properties": { 
+               "description": "winrm1 server port", 
+               "protocol": "Tcp", 
+               "sourcePortRange": "*", 
+               "destinationPortRange": "5985", 
+               "sourceAddressPrefix": "Internet", 
+               "destinationAddressPrefix": "*", 
+               "access": "Allow", 
+               "priority": 103, 
+               "direction": "Inbound" 
+             } 
+           },
+           { 
+             "name": "winrm2", 
+             "properties": { 
+               "description": "winrm2 server port", 
+               "protocol": "Tcp", 
+               "sourcePortRange": "*", 
+               "destinationPortRange": "5986", 
+               "sourceAddressPrefix": "Internet", 
+               "destinationAddressPrefix": "*", 
+               "access": "Allow", 
+               "priority": 104, 
+               "direction": "Inbound" 
+             } 
+           },
+           { 
+             "name": "iperf3-udp", 
+             "properties": { 
+               "description": "iperf3 udp port", 
+               "protocol": "Udp", 
+               "sourcePortRange": "*", 
+               "destinationPortRange": "5201", 
+               "sourceAddressPrefix": "Internet", 
+               "destinationAddressPrefix": "*", 
+               "access": "Allow", 
+               "priority": 105, 
+               "direction": "Inbound" 
+             } 
+           },
+           { 
+             "name": "iperf3-tcp", 
+             "properties": { 
+               "description": "iperf3 tcp port", 
+               "protocol": "Tcp", 
+               "sourcePortRange": "*", 
+               "destinationPortRange": "5201", 
+               "sourceAddressPrefix": "Internet", 
+               "destinationAddressPrefix": "*", 
+               "access": "Allow", 
+               "priority": 106, 
+               "direction": "Inbound" 
+             } 
+           }             
+         ] 
+       } 
+     },     
+    {
+      "apiVersion": "[variables('apiVersion')]",
+      "type": "Microsoft.Network/publicIPAddresses",
+      "name": "[variables('publicIPAddressName')]",
+      "location": "[resourceGroup().location]",
+      "properties": {
+        "publicIPAllocationMethod": "[variables('publicIPAddressType')]",
+        "dnsSettings": {
+          "domainNameLabel": "[parameters('dnsLabelPrefix')]"
+        }
+      }
+    },
+    {
+      "apiVersion": "[variables('apiVersion')]",
+      "type": "Microsoft.Network/virtualNetworks",
+      "name": "[variables('virtualNetworkName')]",
+      "location": "[resourceGroup().location]",
+      "dependsOn": [ 
+     "[concat('Microsoft.Network/networkSecurityGroups/', variables('networkSecurityGroupName'))]" 
+       ], 
+      "properties": {
+        "addressSpace": {
+          "addressPrefixes": [
+            "[variables('addressPrefix')]"
+          ]
+        },
+        "subnets": [
+          {
+            "name": "[variables('subnetName')]",
+            "properties": {
+            "addressPrefix": "[variables('subnetPrefix')]",
+            "networkSecurityGroup": { 
+                 "id": "[resourceId('Microsoft.Network/networkSecurityGroups', variables('networkSecurityGroupName'))]" 
+               }               
+            }
+          }
+        ]
+      }
+    },
+    {
+      "apiVersion": "[variables('apiVersion')]",
+      "type": "Microsoft.Network/networkInterfaces",
+      "name": "[variables('nicName')]",
+      "location": "[resourceGroup().location]",
+      "dependsOn": [
+        "[concat('Microsoft.Network/publicIPAddresses/', variables('publicIPAddressName'))]",
+        "[concat('Microsoft.Network/virtualNetworks/', variables('virtualNetworkName'))]"
+      ],
+      "properties": {
+        "ipConfigurations": [
+          {
+            "name": "ipconfig1",
+            "properties": {
+              "privateIPAllocationMethod": "Dynamic",
+              "publicIPAddress": {
+                "id": "[resourceId('Microsoft.Network/publicIPAddresses',variables('publicIPAddressName'))]"
+              },
+              "subnet": {
+                "id": "[variables('subnetRef')]"
+              }
+            }
+          }
+        ]
+      }
+    },
+    {
+      "apiVersion": "[variables('apiVersion')]",
+      "type": "Microsoft.Compute/virtualMachines",
+      "name": "[variables('vmName')]",
+      "location": "[resourceGroup().location]",
+      "dependsOn": [
+        "[concat('Microsoft.Storage/storageAccounts/', variables('storageAccountName'))]",
+        "[concat('Microsoft.Network/networkInterfaces/', variables('nicName'))]"
+      ],
+      "properties": {
+        "hardwareProfile": {
+          "vmSize": "[parameters('vmSize')]"
+        },
+        "osProfile": {
+          "computerName": "[variables('vmName')]",
+          "adminUsername": "[parameters('adminUsername')]",
+          "adminPassword": "[parameters('adminPassword')]"
+        },
+        "storageProfile": {
+          "imageReference": {
+            "publisher": "[variables('imagePublisher')]",
+            "offer": "[variables('imageOffer')]",
+            "sku": "[parameters('osVersion')]",
+            "version": "latest"
+          },
+          "osDisk": {
+            "name": "osdisk",
+            "vhd": {
+              "uri": "[concat('http://',variables('storageAccountName'),'.blob.core.windows.net/',variables('vmStorageAccountContainerName'),'/',variables('OSDiskName'),'.vhd')]"
+            },
+            "caching": "ReadWrite",
+            "createOption": "FromImage"
+          }
+        },
+        "networkProfile": {
+          "networkInterfaces": [
+            {
+              "id": "[resourceId('Microsoft.Network/networkInterfaces',variables('nicName'))]"
+            }
+          ]
+        },
+        "diagnosticsProfile": {
+          "bootDiagnostics": {
+            "enabled": "true",
+            "storageUri": "[concat('http://',variables('storageAccountName'),'.blob.core.windows.net')]"
+          }
+        }
+      },
+      "resources": [
+        {
+          "type": "extensions",
+          "name": "dsc",
+          "apiVersion": "2015-05-01-preview",
+          "location": "[resourceGroup().location]",
+          "dependsOn": [
+            "[concat('Microsoft.Compute/virtualMachines/', variables('vmName'))]"
+          ],
+          "properties": {
+            "publisher": "Microsoft.Powershell",
+            "type": "DSC",
+            "typeHandlerVersion": "2.19",
+            "autoUpgradeMinorVersion": true,
+            "settings": {
+              "ModulesUrl": "[parameters('modulesUrl')]",
+              "ConfigurationFunction": "[parameters('configurationFunction')]",
+              "Properties": {
+                "MachineName": "[variables('vmName')]"
+              }
+            },
+            "protectedSettings": null
+          }
+        },
+        {
+       "name": "init",
+       "type": "extensions", 
+          "location": "[resourceGroup().location]",
+          "apiVersion": "2015-06-15",
+          "dependsOn": [
+            "[concat('Microsoft.Compute/virtualMachines/', variables('vmName'))]",
+            "[resourceId('Microsoft.Compute/virtualMachines/extensions',  variables('vmName'), 'dsc')]" 
+          ],
+          "tags": {
+            "displayName": "init"
+          },
+          "properties": {
+            "publisher": "Microsoft.Compute",
+            "type": "CustomScriptExtension",
+            "typeHandlerVersion": "1.7",
+            "autoUpgradeMinorVersion": true,
+            "settings": {
+              "fileUris": [
+                "[parameters('initscriptUrl')]"
+              ],
+              "commandToExecute": "[concat('powershell.exe -ExecutionPolicy Unrestricted -File ', parameters('initScriptFileName'),' \"',  parameters('dnsLabelPrefix'), '.', resourceGroup().location, '.cloudapp.azure.com','\" ')]"
+            }
+          }
+       }                 
+      ]
+    }    
+  ],
+  "outputs": {
+    "hostname": {
+      "type": "string",
+      "value": "[concat(parameters('dnsLabelPrefix'), '.', resourceGroup().location, '.cloudapp.azure.com')]"
+    },
+    "mstscCommand": {
+      "type": "string",
+      "value": "[concat('mstsc /admin /v:', parameters('dnsLabelPrefix'), '.', resourceGroup().location, '.cloudapp.azure.com')]"
+    },
+    "httpClient": {
+      "type": "string",
+      "value": "[concat('http://', parameters('dnsLabelPrefix'), '.', resourceGroup().location, '.cloudapp.azure.com')]"
+    },
+    "iperf3client": {
+      "type": "string",
+      "value": "[concat('iperf3 -c ', parameters('dnsLabelPrefix'), '.', resourceGroup().location, '.cloudapp.azure.com -p 5201 --parallel 32') ]"
+    }    
+  }
+}

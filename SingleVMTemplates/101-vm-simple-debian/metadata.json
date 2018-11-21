@@ -1,0 +1,7 @@
+{
+  "itemDisplayName": "Deploy a simple Linux Debian VM with iperf and apache components",
+  "description": "This template allows you to deploy a simple Linux VM running Debian with iperf and apache components",
+  "summary": "This template takes a minimum amount of parameters and deploys a Linux VM, using the latest patched version.",
+  "githubUsername": "flecoqui",
+  "dateUpdated": "2016-05-16"
+}

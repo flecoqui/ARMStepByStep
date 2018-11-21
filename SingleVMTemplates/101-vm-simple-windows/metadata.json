@@ -1,0 +1,7 @@
+{
+  "itemDisplayName": "Deploy a simple Windows Server (2008 R2, 2012, 2012 R2, 2016) VM",
+  "description": "This template allows you to deploy a simple  VM running Windows Server with IIS and iperf",
+  "summary": "This template takes a minimum amount of parameters and deploys a Windows Server VM, using the latest patched version.",
+  "githubUsername": "flecoqui",
+  "dateUpdated": "2016-11-16"
+}
