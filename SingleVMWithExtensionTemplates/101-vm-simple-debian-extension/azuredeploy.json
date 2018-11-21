@@ -40,14 +40,14 @@
     },
     "initscriptUrl": {
       "type": "string",
-      "defaultValue": "https://raw.githubusercontent.com/flecoqui/azure/master/azure-quickstart-templates/101-vm-simple-debian-iperf/install-iperf-test.sh"
+      "defaultValue": "https://raw.githubusercontent.com/flecoqui/ARMStepByStep/master/SingleVMWithExtensionTemplates/101-vm-simple-debian-extension/install.sh"
     },
     "initScriptFileName": {
       "type": "string",
       "metadata": {
         "description": "sh [initScriptFileName]. Logs in this file /var/lib/waagent/Microsoft.OSTCExtensions.CustomScriptForLinux-1.5.2.0/download/0/stdout"
       },
-      "defaultValue": "install-iperf-test.sh"
+      "defaultValue": "install.sh"
     }
   },
   "variables": {
