@@ -133,7 +133,7 @@ namespace TestARMClientApp
                         result = Region.USCentral; break;
                     case "useast":
                         result = Region.USEast; break;
-                    case "usweast2":
+                    case "useast2":
                         result = Region.USEast2; break;
                     case "usnorthcentral":
                         result = Region.USNorthCentral; break;
@@ -289,7 +289,11 @@ namespace TestARMClientApp
                             }
                         }
                         if (rg != null)
+                        {
+                            Console.WriteLine("Deleting resource group: " + resourceGroupName);
                             azure.ResourceGroups.DeleteByName(resourceGroupName);
+                            Console.WriteLine("Deleting resource group: " + resourceGroupName + " done");
+                        }
 
 
                     }

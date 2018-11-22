@@ -2,7 +2,7 @@
   "profiles": {
     "DeployARMTemplate": {
       "commandName": "Project",
-      "commandLineArgs": "--subscriptionId e5c9fc83-fbd0-4368-9cb6-1b5823479b6d --tenantId 72f988bf-86f1-41af-91ab-2d7cd011db47 --clientId fee43e6b-7602-41f7-848c-36cb683732ac --clientSecret 8YVQiFXNflWs9+JyXYoMsinRlCfvc8DqxwG7nA1sBrk= --resourceGroup testrg --region useast2 --templateFile C:\\git\\flecoqui\\ARMStepByStep\\SingleVMTemplates\\101-vm-simple-debian\\azuredeploy.json --parameterFile C:\\git\\flecoqui\\ARMStepByStep\\SingleVMTemplates\\101-vm-simple-debian\\azuredeploy.parameters.json"
+      "commandLineArgs": "--subscriptionId <SubscriptionID> --tenantId <TenantID> --clientId <ClientID> --clientSecret <ClientSecret> --resourceGroup testarmdeployrg --region useast2 --templateFile C:\\git\\flecoqui\\ARMStepByStep\\SingleVMTemplates\\101-vm-simple-debian\\azuredeploy.json --parameterFile C:\\git\\flecoqui\\ARMStepByStep\\SingleVMTemplates\\101-vm-simple-debian\\azuredeploy.parameters.json"
     }
   }
 }
