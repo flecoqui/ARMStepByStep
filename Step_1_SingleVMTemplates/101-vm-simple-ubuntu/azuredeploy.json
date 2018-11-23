@@ -37,17 +37,6 @@
         "description": "VM Size"
       },
       "defaultValue": "Standard_A1"
-    },
-    "initscriptUrl": {
-      "type": "string",
-      "defaultValue": "https://raw.githubusercontent.com/flecoqui/azure/master/azure-quickstart-templates/101-vm-simple-ubuntu-iperf/install-iperf-test.sh"
-    },
-    "initScriptFileName": {
-      "type": "string",
-      "metadata": {
-        "description": "sh [initScriptFileName]. Logs in this file /var/lib/waagent/Microsoft.OSTCExtensions.CustomScriptForLinux-1.5.2.0/download/0/stdout"
-      },
-      "defaultValue": "install-iperf-test.sh"
     }
   },
   "variables": {
@@ -271,33 +260,7 @@
             "storageUri": "[concat('http://',variables('storageAccountName'),'.blob.core.windows.net')]"
           }
         }
-      },
-      "resources": [
-        {
-          "name": "init",
-          "type": "extensions",
-          "location": "[resourceGroup().location]",
-          "apiVersion": "2015-06-15",
-          "dependsOn": [
-            "[concat('Microsoft.Compute/virtualMachines/', variables('vmName'))]"
-          ],
-          "tags": {
-            "displayName": "init"
-          },
-          "properties": {
-            "publisher": "Microsoft.Azure.Extensions",
-            "type": "CustomScript",
-            "typeHandlerVersion": "2.0",
-            "autoUpgradeMinorVersion": true,
-            "settings": {
-              "fileUris": [
-                "[parameters('initscriptUrl')]"
-              ],
-              "commandToExecute": "[concat('sh ', parameters('initScriptFileName'),' \"',  parameters('dnsLabelPrefix'), '.', resourceGroup().location, '.cloudapp.azure.com','\"')]"
-            }
-          }
-        }
-      ]
+      }    
     }
   ],
   "outputs": {
@@ -308,18 +271,6 @@
     "sshCommand": {
       "type": "string",
       "value": "[concat('ssh ', parameters('adminUsername'), '@', parameters('dnsLabelPrefix'), '.', resourceGroup().location, '.cloudapp.azure.com')]"
-    },
-    "resultScript": {
-      "type": "string",
-      "value": "sudo cat /var/lib/waagent/Microsoft.OSTCExtensions.CustomScriptForLinux-1.5.2.0/download/0/stdout" 
-    },
-    "httpClient": {
-      "type": "string",
-      "value": "[concat('http://', parameters('dnsLabelPrefix'), '.', resourceGroup().location, '.cloudapp.azure.com')]"
-    },
-    "iperf3client": {
-      "type": "string",
-      "value": "[concat('iperf3 -c ', parameters('dnsLabelPrefix'), '.', resourceGroup().location, '.cloudapp.azure.com -p 5201 --parallel 32') ]"
     }
   }
 }

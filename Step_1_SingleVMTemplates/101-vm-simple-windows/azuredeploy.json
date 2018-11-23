@@ -40,32 +40,7 @@
         "description": "VM Size"
       },
       "defaultValue": "Standard_D1_v2"
-    },
-    "initscriptUrl": {
-      "type": "string",
-      "defaultValue": "https://raw.githubusercontent.com/flecoqui/azure/master/azure-quickstart-templates/101-vm-simple-windows-iperf/install-iperf-test.ps1"
-    },
-    "initScriptFileName": {
-      "type": "string",
-      "metadata": {
-        "description": "powershell.exe -ExecutionPolicy Unrestricted -File [initScriptFileName]. Logs in this file /var/lib/waagent/Microsoft.OSTCExtensions.CustomScriptForLinux-1.5.2.0/download/0/stdout"
-      },
-      "defaultValue": "install-iperf-test.ps1"
-    },
-    "modulesUrl": { 
-       "type": "string", 
-      "defaultValue": "https://raw.githubusercontent.com/flecoqui/azure/master/azure-quickstart-templates/101-vm-simple-windows-iperf/iperfWebSite.zip",
-       "metadata": { 
-         "description": "URL for the DSC configuration module. NOTE: Can be a Github url(raw) to the zip file" 
-       } 
-     }, 
-    "configurationFunction": { 
-       "type": "string", 
-       "defaultValue": "iperfWebsite.ps1\\iperfWebsite", 
-       "metadata": { 
-         "description": "DSC configuration function to call" 
-       } 
-     } 
+    }
      
   },
   "variables": {
@@ -321,57 +296,7 @@
             "storageUri": "[concat('http://',variables('storageAccountName'),'.blob.core.windows.net')]"
           }
         }
-      },
-      "resources": [
-        {
-          "type": "extensions",
-          "name": "dsc",
-          "apiVersion": "2015-05-01-preview",
-          "location": "[resourceGroup().location]",
-          "dependsOn": [
-            "[concat('Microsoft.Compute/virtualMachines/', variables('vmName'))]"
-          ],
-          "properties": {
-            "publisher": "Microsoft.Powershell",
-            "type": "DSC",
-            "typeHandlerVersion": "2.19",
-            "autoUpgradeMinorVersion": true,
-            "settings": {
-              "ModulesUrl": "[parameters('modulesUrl')]",
-              "ConfigurationFunction": "[parameters('configurationFunction')]",
-              "Properties": {
-                "MachineName": "[variables('vmName')]"
-              }
-            },
-            "protectedSettings": null
-          }
-        },
-        {
-       "name": "init",
-       "type": "extensions", 
-          "location": "[resourceGroup().location]",
-          "apiVersion": "2015-06-15",
-          "dependsOn": [
-            "[concat('Microsoft.Compute/virtualMachines/', variables('vmName'))]",
-            "[resourceId('Microsoft.Compute/virtualMachines/extensions',  variables('vmName'), 'dsc')]" 
-          ],
-          "tags": {
-            "displayName": "init"
-          },
-          "properties": {
-            "publisher": "Microsoft.Compute",
-            "type": "CustomScriptExtension",
-            "typeHandlerVersion": "1.7",
-            "autoUpgradeMinorVersion": true,
-            "settings": {
-              "fileUris": [
-                "[parameters('initscriptUrl')]"
-              ],
-              "commandToExecute": "[concat('powershell.exe -ExecutionPolicy Unrestricted -File ', parameters('initScriptFileName'),' \"',  parameters('dnsLabelPrefix'), '.', resourceGroup().location, '.cloudapp.azure.com','\" ')]"
-            }
-          }
-       }                 
-      ]
+      }
     }    
   ],
   "outputs": {
@@ -382,14 +307,6 @@
     "mstscCommand": {
       "type": "string",
       "value": "[concat('mstsc /admin /v:', parameters('dnsLabelPrefix'), '.', resourceGroup().location, '.cloudapp.azure.com')]"
-    },
-    "httpClient": {
-      "type": "string",
-      "value": "[concat('http://', parameters('dnsLabelPrefix'), '.', resourceGroup().location, '.cloudapp.azure.com')]"
-    },
-    "iperf3client": {
-      "type": "string",
-      "value": "[concat('iperf3 -c ', parameters('dnsLabelPrefix'), '.', resourceGroup().location, '.cloudapp.azure.com -p 5201 --parallel 32') ]"
-    }    
+    } 
   }
 }

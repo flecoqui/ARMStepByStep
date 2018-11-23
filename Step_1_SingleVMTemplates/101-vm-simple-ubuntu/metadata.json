@@ -1,6 +1,6 @@
 {
-  "itemDisplayName": "Deploy a simple Linux Ubuntu VM with iperf and apache components",
-  "description": "This template allows you to deploy a simple Linux VM running Ubuntu with iperf and apache components",
+  "itemDisplayName": "Deploy a simple Linux Ubuntu VM",
+  "description": "This template allows you to deploy a simple Linux VM running Ubuntu",
   "summary": "This template takes a minimum amount of parameters and deploys a Linux VM, using the latest patched version.",
   "githubUsername": "flecoqui",
   "dateUpdated": "2016-11-30"
