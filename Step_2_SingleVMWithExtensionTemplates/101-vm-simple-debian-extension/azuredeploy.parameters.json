@@ -18,7 +18,7 @@
       "value": "Standard_D1_v2"
     },
     "initscriptUrl": {
-      "value": "https://raw.githubusercontent.com/flecoqui/ARMStepByStep/master/SingleVMWithExtensionTemplates/101-vm-simple-debian-extension/install.sh"
+      "value": "https://raw.githubusercontent.com/flecoqui/ARMStepByStep/master/Step_2_SingleVMWithExtensionTemplates/101-vm-simple-debian-extension/install.sh"
     },
     "initScriptFileName": {
       "value": "install.sh"

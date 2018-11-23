@@ -1,11 +1,12 @@
 # Deployment of a VM (Linux or Windows) installing DLIB pre-requisites (c++,python,...)
 
-<a href="https://portal.azure.com/#create/Microsoft.Template/uri/https%3A%2F%2Fraw.githubusercontent.com%2Fflecoqui%2Fazure%2Fmaster%2Fazure-quickstart-templates%2F101-vm-simple-universal-dlib%2Fazuredeploy.json" target="_blank">
+<a href="https://portal.azure.com/#create/Microsoft.Template/uri/https%3A%2F%2Fraw.githubusercontent.com%2Fflecoqui%2FARMStepByStep%2Fmaster%2FStep_4_DataScientistTemplates%2F101-vm-simple-universal-datascientist%2Fazuredeploy.json" target="_blank">
     <img src="http://azuredeploy.net/deploybutton.png"/>
 </a>
-<a href="http://armviz.io/#/?load=https%3A%2F%2Fraw.githubusercontent.com%2Fflecoqui%2Fazure%2Fmaster%2Fazure-quickstart-templates%2F101-vm-simple-universal-dlib%2Fazuredeploy.json" target="_blank">
+<a href="http://armviz.io/#/?load=https%3A%2F%2Fraw.githubusercontent.com%2Fflecoqui%2FARMStepByStep%2Fmaster%2FStep_4_DataScientistTemplates%2F101-vm-simple-universal-datascientist%2Fazuredeploy.json" target="_blank">
     <img src="http://armviz.io/visualizebutton.png"/>
 </a>
+
 
 The objective of this template is to automate the creation of a VM (Linux or Windows) to generate DLIB components and to test those components from a python script. </p>
 Once the VM is deployed the DLIB source code is avaialble under:</p>
@@ -59,7 +60,7 @@ C:\var\log\install.log
 With Azure CLI you can deploy this VM with 2 command lines:
 
 
-![](https://raw.githubusercontent.com/flecoqui/azure/master/azure-quickstart-templates/101-vm-simple-universal-dlib/Docs/1-architecture.png)
+![](https://raw.githubusercontent.com/flecoqui/ARMStepByStep/master/Step_4_DataScientistTemplates/101-vm-simple-universal-datascientist/Docs/1-architecture.png)
 
 
 ## CREATE RESOURCE GROUP:
@@ -182,7 +183,7 @@ You can for instance run the following sample script:
 to check the python configuration.
 Keep in mind before running this test, you need to build the DLIB library (bash buildDLIB.sh) and the python samples (bash buildDLIBPythonSamples.sh).
 
-![](https://raw.githubusercontent.com/flecoqui/azure/master/azure-quickstart-templates/101-vm-simple-universal-dlib/Docs/test1.png)
+![](https://raw.githubusercontent.com/flecoqui/ARMStepByStep/master/Step_4_DataScientistTemplates/101-vm-simple-universal-datascientist/Docs/test1.png)
 
 
 If you want to test python samples which require GUI, you need to install an X11 terminal on your client. If you are using a Windows PC, you could install Putty and XMing to support X11 on your PC:</p>
@@ -192,30 +193,30 @@ If you want to test python samples which require GUI, you need to install an X11
 
 Install Xming following the installation screenshots below:
 
-![](https://raw.githubusercontent.com/flecoqui/azure/master/azure-quickstart-templates/101-vm-simple-universal-dlib/Docs/xming1.jpg)
+![](https://raw.githubusercontent.com/flecoqui/ARMStepByStep/master/Step_4_DataScientistTemplates/101-vm-simple-universal-datascientist/Docs/xming1.jpg)
 
 
-![](https://raw.githubusercontent.com/flecoqui/azure/master/azure-quickstart-templates/101-vm-simple-universal-dlib/Docs/xming2.jpg)
+![](https://raw.githubusercontent.com/flecoqui/ARMStepByStep/master/Step_4_DataScientistTemplates/101-vm-simple-universal-datascientist/Docs/xming2.jpg)
 
 
-![](https://raw.githubusercontent.com/flecoqui/azure/master/azure-quickstart-templates/101-vm-simple-universal-dlib/Docs/xming3.jpg)
+![](https://raw.githubusercontent.com/flecoqui/ARMStepByStep/master/Step_4_DataScientistTemplates/101-vm-simple-universal-datascientist/Docs/xming3.jpg)
 
 
-![](https://raw.githubusercontent.com/flecoqui/azure/master/azure-quickstart-templates/101-vm-simple-universal-dlib/Docs/xming4.jpg)
+![](https://raw.githubusercontent.com/flecoqui/ARMStepByStep/master/Step_4_DataScientistTemplates/101-vm-simple-universal-datascientist/Docs/xming4.jpg)
 
 Configure Putty following the installation screenshots below:</p>
 
 Enter the dns name of your server :</p>
-![](https://raw.githubusercontent.com/flecoqui/azure/master/azure-quickstart-templates/101-vm-simple-universal-dlib/Docs/putty1.png)
+![](https://raw.githubusercontent.com/flecoqui/ARMStepByStep/master/Step_4_DataScientistTemplates/101-vm-simple-universal-datascientist/Docs/putty1.png)
 
 
-![](https://raw.githubusercontent.com/flecoqui/azure/master/azure-quickstart-templates/101-vm-simple-universal-dlib/Docs/putty2.jpg)
+![](https://raw.githubusercontent.com/flecoqui/ARMStepByStep/master/Step_4_DataScientistTemplates/101-vm-simple-universal-datascientist/Docs/putty2.jpg)
 
 
-![](https://raw.githubusercontent.com/flecoqui/azure/master/azure-quickstart-templates/101-vm-simple-universal-dlib/Docs/putty3.jpg)
+![](https://raw.githubusercontent.com/flecoqui/ARMStepByStep/master/Step_4_DataScientistTemplates/101-vm-simple-universal-datascientist/Docs/putty3.jpg)
 
 
-![](https://raw.githubusercontent.com/flecoqui/azure/master/azure-quickstart-templates/101-vm-simple-universal-dlib/Docs/putty4.jpg)
+![](https://raw.githubusercontent.com/flecoqui/ARMStepByStep/master/Step_4_DataScientistTemplates/101-vm-simple-universal-datascientist/Docs/putty4.jpg)
 
 
 The server is already configured to support X11 over SSH, and the file /etc/ssh/ssh_config has been updated:
@@ -230,12 +231,12 @@ The file /etc/ssh/sshd_config has been updated:
 
 
 Before launching Putty to open an SSH session with your VM check that XMing is running on your local Windows Machine:
-![](https://raw.githubusercontent.com/flecoqui/azure/master/azure-quickstart-templates/101-vm-simple-universal-dlib/Docs/xming5.png)
+![](https://raw.githubusercontent.com/flecoqui/ARMStepByStep/master/Step_4_DataScientistTemplates/101-vm-simple-universal-datascientist/Docs/xming5.png)
 
 
 Once you are connected with Putty,
 
-![](https://raw.githubusercontent.com/flecoqui/azure/master/azure-quickstart-templates/101-vm-simple-universal-dlib/Docs/putty5.png)
+![](https://raw.githubusercontent.com/flecoqui/ARMStepByStep/master/Step_4_DataScientistTemplates/101-vm-simple-universal-datascientist/Docs/putty5.png)
 
 Enter the following commands to test if X11 is running: </p>
 
@@ -243,7 +244,7 @@ Enter the following commands to test if X11 is running: </p>
 
 The Clock should be displayed on your Windows machine:
 
-![](https://raw.githubusercontent.com/flecoqui/azure/master/azure-quickstart-templates/101-vm-simple-universal-dlib/Docs/putty6.png)
+![](https://raw.githubusercontent.com/flecoqui/ARMStepByStep/master/Step_4_DataScientistTemplates/101-vm-simple-universal-datascientist/Docs/putty6.png)
 
 Now you can test the python samples requiring GUI:</p>
 For instance under /git/dlib/python_examples run the following command:</p>
@@ -252,7 +253,7 @@ For instance under /git/dlib/python_examples run the following command:</p>
 
  and check that the picture is displayed on your local machine:</p>
 
-![](https://raw.githubusercontent.com/flecoqui/azure/master/azure-quickstart-templates/101-vm-simple-universal-dlib/Docs/putty7.png)
+![](https://raw.githubusercontent.com/flecoqui/ARMStepByStep/master/Step_4_DataScientistTemplates/101-vm-simple-universal-datascientist/Docs/putty7.png)
 
 ## DELETE THE RESOURCE GROUP:
 azure group delete "ResourceGroupName" "DataCenterName"

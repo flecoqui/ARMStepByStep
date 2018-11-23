@@ -18,16 +18,16 @@
       "value": "2016-Datacenter"
     },
     "modulesUrl": {
-      "value": "https://raw.githubusercontent.com/flecoqui/azure/master/azure-quickstart-templates/101-vm-simple-windows-iperf/iperfWebsite.zip"
+      "value": "https://raw.githubusercontent.com/flecoqui/ARMStepByStep/master/Step_2_SingleVMWithExtensionTemplates/101-vm-simple-windows-extension/Website.zip"
     },
     "configurationFunction": {
-      "value": "iperfWebsite.ps1\\iperfWebsite"
+      "value": "Website.ps1\\Website"
     },
     "initscriptUrl": {
-      "value": "https://raw.githubusercontent.com/flecoqui/azure/master/azure-quickstart-templates/101-vm-simple-windows-iperf/install-iperf-test.ps1"
+      "value": "https://raw.githubusercontent.com/flecoqui/ARMStepByStep/master/Step_2_SingleVMWithExtensionTemplates/101-vm-simple-windows-extension/install.ps1"
     },
     "initScriptFileName": {
-      "value": "install-iperf-test.ps1"
+      "value": "install.ps1"
     }
    }
 }

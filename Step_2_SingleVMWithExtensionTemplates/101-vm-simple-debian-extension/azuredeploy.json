@@ -40,7 +40,7 @@
     },
     "initscriptUrl": {
       "type": "string",
-      "defaultValue": "https://raw.githubusercontent.com/flecoqui/ARMStepByStep/master/SingleVMWithExtensionTemplates/101-vm-simple-debian-extension/install.sh"
+      "defaultValue": "https://raw.githubusercontent.com/flecoqui/ARMStepByStep/master/Step_2_SingleVMWithExtensionTemplates/101-vm-simple-debian-extension/install.sh"
     },
     "initScriptFileName": {
       "type": "string",

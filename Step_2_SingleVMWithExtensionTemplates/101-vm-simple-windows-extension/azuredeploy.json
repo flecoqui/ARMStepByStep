@@ -43,25 +43,25 @@
     },
     "initscriptUrl": {
       "type": "string",
-      "defaultValue": "https://raw.githubusercontent.com/flecoqui/azure/master/azure-quickstart-templates/101-vm-simple-windows-iperf/install-iperf-test.ps1"
+      "defaultValue": "https://raw.githubusercontent.com/flecoqui/ARMStepByStep/master/Step_2_SingleVMWithExtensionTemplates/101-vm-simple-windows-extension/install.ps1"
     },
     "initScriptFileName": {
       "type": "string",
       "metadata": {
         "description": "powershell.exe -ExecutionPolicy Unrestricted -File [initScriptFileName]. Logs in this file /var/lib/waagent/Microsoft.OSTCExtensions.CustomScriptForLinux-1.5.2.0/download/0/stdout"
       },
-      "defaultValue": "install-iperf-test.ps1"
+      "defaultValue": "install.ps1"
     },
-    "modulesUrl": { 
-       "type": "string", 
-      "defaultValue": "https://raw.githubusercontent.com/flecoqui/azure/master/azure-quickstart-templates/101-vm-simple-windows-iperf/iperfWebSite.zip",
-       "metadata": { 
-         "description": "URL for the DSC configuration module. NOTE: Can be a Github url(raw) to the zip file" 
-       } 
-     }, 
+    "modulesUrl": {
+      "type": "string",
+      "defaultValue": "https://raw.githubusercontent.com/flecoqui/ARMStepByStep/master/Step_2_SingleVMWithExtensionTemplates/101-vm-simple-windows-extension/Website.zip",
+      "metadata": {
+        "description": "URL for the DSC configuration module. NOTE: Can be a Github url(raw) to the zip file"
+      }
+    }, 
     "configurationFunction": { 
        "type": "string", 
-       "defaultValue": "iperfWebsite.ps1\\iperfWebsite", 
+       "defaultValue": "Website.ps1\\Website", 
        "metadata": { 
          "description": "DSC configuration function to call" 
        } 
@@ -177,35 +177,7 @@
                "priority": 104, 
                "direction": "Inbound" 
              } 
-           },
-           { 
-             "name": "iperf3-udp", 
-             "properties": { 
-               "description": "iperf3 udp port", 
-               "protocol": "Udp", 
-               "sourcePortRange": "*", 
-               "destinationPortRange": "5201", 
-               "sourceAddressPrefix": "Internet", 
-               "destinationAddressPrefix": "*", 
-               "access": "Allow", 
-               "priority": 105, 
-               "direction": "Inbound" 
-             } 
-           },
-           { 
-             "name": "iperf3-tcp", 
-             "properties": { 
-               "description": "iperf3 tcp port", 
-               "protocol": "Tcp", 
-               "sourcePortRange": "*", 
-               "destinationPortRange": "5201", 
-               "sourceAddressPrefix": "Internet", 
-               "destinationAddressPrefix": "*", 
-               "access": "Allow", 
-               "priority": 106, 
-               "direction": "Inbound" 
-             } 
-           }             
+           }    
          ] 
        } 
      },     
@@ -386,10 +358,6 @@
     "httpClient": {
       "type": "string",
       "value": "[concat('http://', parameters('dnsLabelPrefix'), '.', resourceGroup().location, '.cloudapp.azure.com')]"
-    },
-    "iperf3client": {
-      "type": "string",
-      "value": "[concat('iperf3 -c ', parameters('dnsLabelPrefix'), '.', resourceGroup().location, '.cloudapp.azure.com -p 5201 --parallel 32') ]"
-    }    
+    }   
   }
 }

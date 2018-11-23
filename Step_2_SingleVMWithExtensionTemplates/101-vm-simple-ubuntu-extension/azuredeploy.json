@@ -40,14 +40,14 @@
     },
     "initscriptUrl": {
       "type": "string",
-      "defaultValue": "https://raw.githubusercontent.com/flecoqui/azure/master/azure-quickstart-templates/101-vm-simple-ubuntu-iperf/install-iperf-test.sh"
+      "defaultValue": "https://raw.githubusercontent.com/flecoqui/ARMStepByStep/master/Step_2_SingleVMWithExtensionTemplates/101-vm-simple-ubuntu-extension/install.sh"
     },
     "initScriptFileName": {
       "type": "string",
       "metadata": {
         "description": "sh [initScriptFileName]. Logs in this file /var/lib/waagent/Microsoft.OSTCExtensions.CustomScriptForLinux-1.5.2.0/download/0/stdout"
       },
-      "defaultValue": "install-iperf-test.sh"
+      "defaultValue": "install.sh"
     }
   },
   "variables": {
@@ -116,35 +116,7 @@
                "priority": 101, 
                "direction": "Inbound" 
              } 
-           },
-           { 
-             "name": "iperf3-udp", 
-             "properties": { 
-               "description": "iperf3 udp port", 
-               "protocol": "Udp", 
-               "sourcePortRange": "*", 
-               "destinationPortRange": "5201", 
-               "sourceAddressPrefix": "Internet", 
-               "destinationAddressPrefix": "*", 
-               "access": "Allow", 
-               "priority": 102, 
-               "direction": "Inbound" 
-             } 
-           },
-           { 
-             "name": "iperf3-tcp", 
-             "properties": { 
-               "description": "iperf3 tcp port", 
-               "protocol": "Tcp", 
-               "sourcePortRange": "*", 
-               "destinationPortRange": "5201", 
-               "sourceAddressPrefix": "Internet", 
-               "destinationAddressPrefix": "*", 
-               "access": "Allow", 
-               "priority": 103, 
-               "direction": "Inbound" 
-             } 
-           }             
+           }     
          ] 
        } 
      },     
@@ -316,10 +288,6 @@
     "httpClient": {
       "type": "string",
       "value": "[concat('http://', parameters('dnsLabelPrefix'), '.', resourceGroup().location, '.cloudapp.azure.com')]"
-    },
-    "iperf3client": {
-      "type": "string",
-      "value": "[concat('iperf3 -c ', parameters('dnsLabelPrefix'), '.', resourceGroup().location, '.cloudapp.azure.com -p 5201 --parallel 32') ]"
     }
   }
 }

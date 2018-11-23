@@ -1,9 +1,9 @@
-# Deployment of a VM (Linux or Windows) running Apache or IIS (port 80) (port 5201)
+# Deployment of a VM (Linux or Windows) running Apache or IIS (port 80) 
 
-<a href="https://portal.azure.com/#create/Microsoft.Template/uri/https%3A%2F%2Fraw.githubusercontent.com%2Fflecoqui%2FARMStepByStep%2Fmaster%2FSingleVMUniversalTemplate%2F101-vm-simple-universal%2Fazuredeploy.json" target="_blank">
+<a href="https://portal.azure.com/#create/Microsoft.Template/uri/https%3A%2F%2Fraw.githubusercontent.com%2Fflecoqui%2FARMStepByStep%2Fmaster%2FStep_3_SingleVMUniversalTemplate%2F101-vm-simple-universal%2Fazuredeploy.json" target="_blank">
     <img src="http://azuredeploy.net/deploybutton.png"/>
 </a>
-<a href="http://armviz.io/#/?load=https%3A%2F%2Fraw.githubusercontent.com%2Fflecoqui%2FARMStepByStep%2Fmaster%2FSingleVMUniversalTemplate%2F101-vm-simple-universal%2Fazuredeploy.json" target="_blank">
+<a href="http://armviz.io/#/?load=https%3A%2F%2Fraw.githubusercontent.com%2Fflecoqui%2FARMStepByStep%2Fmaster%2FStep_3_SingleVMUniversalTemplate%2F101-vm-simple-universal%2Fazuredeploy.json" target="_blank">
     <img src="http://armviz.io/visualizebutton.png"/>
 </a>
 
@@ -19,7 +19,7 @@ This will deploy in the region associated with Resource Group and the VM Size is
 With Azure CLI you can deploy this VM with 2 command lines:
 
 
-![](https://raw.githubusercontent.com/flecoqui/ARMStepByStep/master/SingleVMUniversalTemplate/101-vm-simple-universal/Docs/1-architecture.png)
+![](https://raw.githubusercontent.com/flecoqui/ARMStepByStep/master/Step_3_SingleVMUniversalTemplate/101-vm-simple-universal/Docs/1-architecture.png)
 
 
 
