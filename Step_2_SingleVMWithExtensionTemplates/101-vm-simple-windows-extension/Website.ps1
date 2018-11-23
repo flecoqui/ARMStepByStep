@@ -1,4 +1,4 @@
-Configuration iperfWebsite
+Configuration Website
 {
   param ($MachineName)
 

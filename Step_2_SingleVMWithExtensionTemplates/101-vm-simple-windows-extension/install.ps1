@@ -1,8 +1,7 @@
 # This script install :
-# - iperf3 on a computer running Windows
 # - Create a basic HTML home page
 #
-#usage install-iperf-test.ps1 dnsname
+#usage install.ps1 dnsname
 
 param
 (
