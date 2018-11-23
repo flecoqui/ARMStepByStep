@@ -105,35 +105,7 @@
                "priority": 101, 
                "direction": "Inbound" 
              } 
-           },
-           { 
-             "name": "iperf3-udp", 
-             "properties": { 
-               "description": "iperf3 udp port", 
-               "protocol": "Udp", 
-               "sourcePortRange": "*", 
-               "destinationPortRange": "5201", 
-               "sourceAddressPrefix": "Internet", 
-               "destinationAddressPrefix": "*", 
-               "access": "Allow", 
-               "priority": 102, 
-               "direction": "Inbound" 
-             } 
-           },
-           { 
-             "name": "iperf3-tcp", 
-             "properties": { 
-               "description": "iperf3 tcp port", 
-               "protocol": "Tcp", 
-               "sourcePortRange": "*", 
-               "destinationPortRange": "5201", 
-               "sourceAddressPrefix": "Internet", 
-               "destinationAddressPrefix": "*", 
-               "access": "Allow", 
-               "priority": 103, 
-               "direction": "Inbound" 
-             } 
-           }             
+           }      
          ] 
        } 
      },     

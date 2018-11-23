@@ -16,7 +16,7 @@
     },
     "dnsLabelPrefix": {
       "type": "string",
-      "defaultValue": "iperfwinvm001",
+      "defaultValue": "winvm001",
       "metadata": {
         "description": "Unique DNS Name for the Public IP used to access the Virtual Machine. DNS name: <dnsLabelPrefix>.<Region>.cloudapp.azure.com"
       }
@@ -152,35 +152,7 @@
                "priority": 104, 
                "direction": "Inbound" 
              } 
-           },
-           { 
-             "name": "iperf3-udp", 
-             "properties": { 
-               "description": "iperf3 udp port", 
-               "protocol": "Udp", 
-               "sourcePortRange": "*", 
-               "destinationPortRange": "5201", 
-               "sourceAddressPrefix": "Internet", 
-               "destinationAddressPrefix": "*", 
-               "access": "Allow", 
-               "priority": 105, 
-               "direction": "Inbound" 
-             } 
-           },
-           { 
-             "name": "iperf3-tcp", 
-             "properties": { 
-               "description": "iperf3 tcp port", 
-               "protocol": "Tcp", 
-               "sourcePortRange": "*", 
-               "destinationPortRange": "5201", 
-               "sourceAddressPrefix": "Internet", 
-               "destinationAddressPrefix": "*", 
-               "access": "Allow", 
-               "priority": 106, 
-               "direction": "Inbound" 
-             } 
-           }             
+           }        
          ] 
        } 
      },     
