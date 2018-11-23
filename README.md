@@ -58,7 +58,7 @@ For additional Windows samples, see [Windows Universal Samples on GitHub](https:
   <th colspan="3" align="left">Step 4: DataScientist  Template</th>
  </tr>
  <tr>
-  <td><a href="Step_4_DataScientistTemplates/101-vm-simple-universal-datascientist">Universal Template</a></td>
+  <td><a href="Step_4_DataScientistTemplates/101-vm-simple-universal-datascientist">Universal DataScientist Template</a></td>
    </tr>
 </table>
 

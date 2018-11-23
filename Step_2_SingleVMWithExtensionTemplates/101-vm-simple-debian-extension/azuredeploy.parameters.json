@@ -9,7 +9,7 @@
       "value": "VMP@ssw0rd"
     },
     "dnsLabelPrefix": {
-      "value": "simpledebianvm"
+      "value": "debianvm"
     },
     "debianOSVersion": {
       "value": "8"

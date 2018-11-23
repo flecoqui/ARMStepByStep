@@ -9,7 +9,7 @@
       "value": "VMP@ssw0rd"
     },
     "dnsLabelPrefix": {
-      "value": "iperfubuntuvm001"
+      "value": "ubuntuvm001"
     },
     "ubuntuOSVersion": {
       "value": "16.04.0-LTS"

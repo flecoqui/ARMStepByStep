@@ -9,7 +9,7 @@
       "value": "VMP@ssw0rd"
     },
     "dnsLabelPrefix": {
-      "value": "simplewindowsvm001"
+      "value": "winvm001"
     },
     "vmSize": {
       "value": "Standard_D1_v2"
