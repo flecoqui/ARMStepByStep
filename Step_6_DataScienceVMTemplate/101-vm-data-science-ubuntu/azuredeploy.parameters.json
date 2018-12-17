@@ -9,7 +9,7 @@
       "value": "VMP@ssw0rd"
     },
     "dnsLabelPrefix": {
-      "value": "simpleubunutuvm"
+      "value": "datascienceuvm"
     },
     "vmSize": {
       "value": "Standard_D1_v2"
