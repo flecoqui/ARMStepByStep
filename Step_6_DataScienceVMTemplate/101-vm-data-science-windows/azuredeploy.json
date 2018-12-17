@@ -31,6 +31,11 @@
      
   },
   "variables": {
+    "marketplacePlan": {
+      "name": "windows2016",
+      "publisher": "microsoft-ads",
+      "product": "windows-data-science-vm"
+    },
     "storageAccountName": "[concat(parameters('dnsLabelPrefix'), 'storage')]",
     "networkSecurityGroupName": "[concat(parameters('dnsLabelPrefix'), 'nsg')]",
     "dataDisk1VhdName": "[concat(parameters('dnsLabelPrefix'), 'datadisk')]",
@@ -221,6 +226,7 @@
         "hardwareProfile": {
           "vmSize": "[parameters('vmSize')]"
         },
+        "plan": "[variables('marketplacePlan')]",
         "osProfile": {
           "computerName": "[variables('vmName')]",
           "adminUsername": "[parameters('adminUsername')]",
