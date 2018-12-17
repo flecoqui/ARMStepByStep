@@ -1,0 +1,7 @@
+{
+  "itemDisplayName": "Deploy a Data Science Windows 2016 VM",
+  "description": "This template allows you to deploy a simple  VM Windows 2016 Data Science VM",
+  "summary": "This template takes a minimum amount of parameters and deploys a Windows 2016 Data Science VM, using the latest patched version.",
+  "githubUsername": "flecoqui",
+  "dateUpdated": "2016-11-16"
+}
