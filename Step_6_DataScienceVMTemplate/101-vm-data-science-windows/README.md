@@ -24,6 +24,16 @@ For instance:
 
     az group create -n datasciencevmrg -l eastus2
 
+## ACCEPT THE TERMS FOR THE DEPLOYMENT OF THIS VM:
+
+**Azure CLI 2.0:** az vm image accept-terms --urn microsoft-ads:windows-data-science-vm:windows2016:latest
+
+For instance:
+
+	az vm image accept-terms --urn microsoft-ads:windows-data-science-vm:windows2016:latest
+
+
+
 ## DEPLOY THE VM:
 **Azure CLI:** azure group deployment create "ResourceGroupName" "DeploymentName"  -f azuredeploy.json -e azuredeploy.parameters.json*
 
@@ -33,6 +43,7 @@ For instance:
 
     azure group deployment create datasciencevmrg datasciencevmtest -f azuredeploy.json -e azuredeploy.parameters.json -vv
 
+	az vm image accept-terms --urn microsoft-ads:windows-data-science-vm:windows2016:latest
     az group deployment create -g datasciencevmrg -n datasciencevmtest --template-file azuredeploy.json --parameter @azuredeploy.parameters.json --verbose -o json
 
 ## DELETE THE RESOURCE GROUP:
