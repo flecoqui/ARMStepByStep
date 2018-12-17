@@ -25,11 +25,11 @@ For instance:
 
 ## ACCEPT THE TERMS FOR THE DEPLOYMENT OF THIS MARKET PLACE VM:
 
-**Azure CLI 2.0:** az vm image accept-terms --urn microsoft-ads:windows-data-science-vm:windows2016:latest
+**Azure CLI 2.0:** az vm image accept-terms --urn microsoft-ads:linux-data-science-vm-ubuntu:linuxdsvmubuntu:latest
 
 For instance:
 
-	az vm image accept-terms --urn microsoft-ads:windows-data-science-vm:windows2016:latest
+	az vm image accept-terms --urn microsoft-ads:linux-data-science-vm-ubuntu:linuxdsvmubuntu:latest
 
 
 
