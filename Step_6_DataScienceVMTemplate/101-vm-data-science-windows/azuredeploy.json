@@ -222,11 +222,11 @@
         "[concat('Microsoft.Storage/storageAccounts/', variables('storageAccountName'))]",
         "[concat('Microsoft.Network/networkInterfaces/', variables('nicName'))]"
       ],
+      "plan": "[variables('marketplacePlan')]",
       "properties": {
         "hardwareProfile": {
           "vmSize": "[parameters('vmSize')]"
         },
-        "plan": "[variables('marketplacePlan')]",
         "osProfile": {
           "computerName": "[variables('vmName')]",
           "adminUsername": "[parameters('adminUsername')]",
