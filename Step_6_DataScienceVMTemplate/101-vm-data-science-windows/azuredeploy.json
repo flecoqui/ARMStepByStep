@@ -73,79 +73,93 @@
        "type": "Microsoft.Network/networkSecurityGroups", 
        "name": "[variables('networkSecurityGroupName')]", 
        "location": "[resourceGroup().location]", 
-       "properties": { 
-         "securityRules": [ 
-           { 
-             "name": "RDP", 
-             "properties": { 
-               "description": "RDP", 
-               "protocol": "Tcp", 
-               "sourcePortRange": "*", 
-               "destinationPortRange": "3389", 
-               "sourceAddressPrefix": "*", 
-               "destinationAddressPrefix": "*", 
-               "access": "Allow", 
-               "priority": 100, 
-               "direction": "Inbound" 
-             } 
-           }, 
-           { 
-             "name": "http", 
-             "properties": { 
-               "description": "http server port", 
-               "protocol": "Tcp", 
-               "sourcePortRange": "*", 
-               "destinationPortRange": "80", 
-               "sourceAddressPrefix": "Internet", 
-               "destinationAddressPrefix": "*", 
-               "access": "Allow", 
-               "priority": 101, 
-               "direction": "Inbound" 
-             } 
-           },
-           { 
-             "name": "https", 
-             "properties": { 
-               "description": "https server port", 
-               "protocol": "Tcp", 
-               "sourcePortRange": "*", 
-               "destinationPortRange": "443", 
-               "sourceAddressPrefix": "Internet", 
-               "destinationAddressPrefix": "*", 
-               "access": "Allow", 
-               "priority": 102, 
-               "direction": "Inbound" 
-             } 
-           },
-           { 
-             "name": "winrm1", 
-             "properties": { 
-               "description": "winrm1 server port", 
-               "protocol": "Tcp", 
-               "sourcePortRange": "*", 
-               "destinationPortRange": "5985", 
-               "sourceAddressPrefix": "Internet", 
-               "destinationAddressPrefix": "*", 
-               "access": "Allow", 
-               "priority": 103, 
-               "direction": "Inbound" 
-             } 
-           },
-           { 
-             "name": "winrm2", 
-             "properties": { 
-               "description": "winrm2 server port", 
-               "protocol": "Tcp", 
-               "sourcePortRange": "*", 
-               "destinationPortRange": "5986", 
-               "sourceAddressPrefix": "Internet", 
-               "destinationAddressPrefix": "*", 
-               "access": "Allow", 
-               "priority": 104, 
-               "direction": "Inbound" 
-             } 
-           }        
-         ] 
+       "properties": {
+        "securityRules": [
+          {
+            "name": "RDP",
+            "properties": {
+              "description": "RDP",
+              "protocol": "Tcp",
+              "sourcePortRange": "*",
+              "destinationPortRange": "3389",
+              "sourceAddressPrefix": "*",
+              "destinationAddressPrefix": "*",
+              "access": "Allow",
+              "priority": 100,
+              "direction": "Inbound"
+            }
+          },
+          {
+            "name": "http",
+            "properties": {
+              "description": "http server port",
+              "protocol": "Tcp",
+              "sourcePortRange": "*",
+              "destinationPortRange": "80",
+              "sourceAddressPrefix": "Internet",
+              "destinationAddressPrefix": "*",
+              "access": "Allow",
+              "priority": 101,
+              "direction": "Inbound"
+            }
+          },
+          {
+            "name": "https",
+            "properties": {
+              "description": "https server port",
+              "protocol": "Tcp",
+              "sourcePortRange": "*",
+              "destinationPortRange": "443",
+              "sourceAddressPrefix": "Internet",
+              "destinationAddressPrefix": "*",
+              "access": "Allow",
+              "priority": 102,
+              "direction": "Inbound"
+            }
+          },
+          {
+            "name": "winrm1",
+            "properties": {
+              "description": "winrm1 server port",
+              "protocol": "Tcp",
+              "sourcePortRange": "*",
+              "destinationPortRange": "5985",
+              "sourceAddressPrefix": "Internet",
+              "destinationAddressPrefix": "*",
+              "access": "Allow",
+              "priority": 103,
+              "direction": "Inbound"
+            }
+          },
+          {
+            "name": "winrm2",
+            "properties": {
+              "description": "winrm2 server port",
+              "protocol": "Tcp",
+              "sourcePortRange": "*",
+              "destinationPortRange": "5986",
+              "sourceAddressPrefix": "Internet",
+              "destinationAddressPrefix": "*",
+              "access": "Allow",
+              "priority": 104,
+              "direction": "Inbound"
+            }
+          },
+          {
+            "name": "jupyter",
+            "properties": {
+              "description": "jupyter server port",
+              "protocol": "Tcp",
+              "sourcePortRange": "*",
+              "destinationPortRange": "8000",
+              "sourceAddressPrefix": "Internet",
+              "destinationAddressPrefix": "*",
+              "access": "Allow",
+              "priority": 105,
+              "direction": "Inbound"
+            }
+          }
+        ] 
        } 
      },     
     {

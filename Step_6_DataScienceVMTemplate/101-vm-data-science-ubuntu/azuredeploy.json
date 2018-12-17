@@ -71,37 +71,51 @@
        "type": "Microsoft.Network/networkSecurityGroups", 
        "name": "[variables('networkSecurityGroupName')]", 
        "location": "[resourceGroup().location]", 
-       "properties": { 
-         "securityRules": [ 
-           { 
-             "name": "ssh", 
-             "properties": { 
-               "description": "SSH port", 
-               "protocol": "Tcp", 
-               "sourcePortRange": "*", 
-               "destinationPortRange": "22", 
-               "sourceAddressPrefix": "Internet", 
-               "destinationAddressPrefix": "*", 
-               "access": "Allow", 
-               "priority": 100, 
-               "direction": "Inbound" 
-             } 
-           }, 
-           { 
-             "name": "http", 
-             "properties": { 
-               "description": "http server port", 
-               "protocol": "Tcp", 
-               "sourcePortRange": "*", 
-               "destinationPortRange": "80", 
-               "sourceAddressPrefix": "Internet", 
-               "destinationAddressPrefix": "*", 
-               "access": "Allow", 
-               "priority": 101, 
-               "direction": "Inbound" 
-             } 
-           }      
-         ] 
+       "properties": {
+        "securityRules": [
+          {
+            "name": "ssh",
+            "properties": {
+              "description": "SSH port",
+              "protocol": "Tcp",
+              "sourcePortRange": "*",
+              "destinationPortRange": "22",
+              "sourceAddressPrefix": "Internet",
+              "destinationAddressPrefix": "*",
+              "access": "Allow",
+              "priority": 100,
+              "direction": "Inbound"
+            }
+          },
+          {
+            "name": "http",
+            "properties": {
+              "description": "http server port",
+              "protocol": "Tcp",
+              "sourcePortRange": "*",
+              "destinationPortRange": "80",
+              "sourceAddressPrefix": "Internet",
+              "destinationAddressPrefix": "*",
+              "access": "Allow",
+              "priority": 101,
+              "direction": "Inbound"
+            }
+          },
+          {
+            "name": "jupyter",
+            "properties": {
+              "description": "jupyter server port",
+              "protocol": "Tcp",
+              "sourcePortRange": "*",
+              "destinationPortRange": "8000",
+              "sourceAddressPrefix": "Internet",
+              "destinationAddressPrefix": "*",
+              "access": "Allow",
+              "priority": 102,
+              "direction": "Inbound"
+            }
+          }
+        ] 
        } 
      },     
     {
@@ -205,13 +219,12 @@
           },
           "dataDisks": [
             {
-              "name": "datadisk1",
-              "diskSizeGB": "100",
+              "name": "[variables('dataDisk1VhdName')]",
               "lun": 0,
               "vhd": {
                 "uri": "[concat('http://',variables('storageAccountName'),'.blob.core.windows.net/',variables('vmStorageAccountContainerName'),'/',variables('dataDisk1VhdName'),'.vhd')]"
               },
-              "createOption": "Empty"
+              "createOption": "FromImage"
             }
           ]
         },
