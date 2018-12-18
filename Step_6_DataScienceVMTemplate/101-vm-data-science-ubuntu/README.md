@@ -38,6 +38,8 @@ For instance:
 
 **Azure CLI 2.0:** az group deployment create -g "ResourceGroupName" -n "DeploymentName" --template-file "templatefile.json" --parameters @"templatefile.parameter..json"  --verbose -o json
 
+**Warning:** In order to use the Jupyter Notebook (http://<VMIPAddress>:8000/) use a Linux login in lower case. If the default login includes an upper-case character you'll get an "500: internal server" error.
+
 For instance:
 
     azure group deployment create datasciencevmrg datasciencevmtest -f azuredeploy.json -e azuredeploy.parameters.json -vv

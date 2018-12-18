@@ -3,7 +3,7 @@
   "contentVersion": "1.0.0.0",
   "parameters": {
     "adminUsername": {
-      "value": "VMAdmin"
+      "value": "vmadmin"
     },
     "adminPassword": {
       "value": "VMP@ssw0rd"
