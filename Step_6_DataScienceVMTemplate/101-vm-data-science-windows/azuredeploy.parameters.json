@@ -12,7 +12,7 @@
       "value": "winvm001"
     },
     "vmSize": {
-      "value": "Standard_D1_v2"
+      "value": "Standard_F4"
     }
    }
 }
