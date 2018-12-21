@@ -1,0 +1,7 @@
+{
+  "itemDisplayName": "Deploy an ASP.NET Core React Redux services in Docker containers ",
+  "description": "This template and the scripts associated allows you to deploy a simple  ASP.NET Core React Redux service",
+  "summary": "This ASP.NET Core React Redux sample show how to deploy the same service in a local Docker container and in Azure AKS.",
+  "githubUsername": "flecoqui",
+  "dateUpdated": "2018-12-18"
+}
