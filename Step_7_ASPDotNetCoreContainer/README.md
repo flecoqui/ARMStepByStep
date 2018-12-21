@@ -31,24 +31,31 @@ or create the application from the .Net Core SDK:
 1. Open a command shell window
 2. Change Directory to your dev directory
 
-    C:\users\me>
-    C:\users\me> cd \dev
-    C:\dev> 
+
+        C:\users\me>
+        C:\users\me> cd \dev
+        C:\dev> 
+
 
 3. Create a directory called aspnetcoreapp 
 
-    C:\dev> mkdir aspnetcoreapp
-    C:\dev> 
+
+        C:\dev> mkdir aspnetcoreapp
+        C:\dev> 
+
 
 
 4. Change directory to aspnetcoreapp 
 
-    C:\dev> cd aspnetcoreapp
-    C:\dev\aspnetcoreapp> 
+
+        C:\dev> cd aspnetcoreapp
+        C:\dev\aspnetcoreapp> 
+
 
 5. Create the application using the following command: 
 
-    C:\dev\aspnetcoreapp> dotnet new reactredux 
+
+        C:\dev\aspnetcoreapp> dotnet new reactredux 
 
 
 
@@ -56,18 +63,23 @@ or create the application from the .Net Core SDK:
 
 1. Build the application using the following command: 
 
-    C:\dev\aspnetcoreapp> dotnet build 
+
+        C:\dev\aspnetcoreapp> dotnet build 
+
 
 ### Running the application locally
 
 1. Run the application using the following command: 
 
-    C:\dev\aspnetcoreapp> dotnet run 
+
+        C:\dev\aspnetcoreapp> dotnet run 
+
 
 2. With your favorite Browser open the url http://localhost:5000 
 As it's an http connection and not a https connection, the browser will block the connection click on a link displayed (Advanced or Details) on the screen to open an http connection with the ASP.Net Core Application running on your machine.
+The following page should be displayed on your browser
 
-<img src="http://azuredeploy.net/deploybutton.png"/>
+<img src="https://raw.githubusercontent.com/flecoqui/ARMStepByStep/master/Step_7_ASPDotNetCoreContainer/Docs/aspnetpage.png"/>
    
 ## CREATE RESOURCE GROUP:
 1.	Azure Subscription
