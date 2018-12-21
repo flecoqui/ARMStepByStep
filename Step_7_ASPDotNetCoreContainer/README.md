@@ -110,8 +110,8 @@ The following page should be displayed on your browser
 
 ### Pre-requisite
 First you need to install Docker on your machine:
-You can download Docker for Windows from (there https://docs.docker.com/docker-for-windows/install/)[https://docs.docker.com/docker-for-windows/install/]
-You can also download Docker from (there: https://hub.docker.com/editions/community/docker-ce-desktop-windows?tab=description )[https://hub.docker.com/editions/community/docker-ce-desktop-windows?tab=description] 
+You can download Docker for Windows from there https://docs.docker.com/docker-for-windows/install/
+You can also download Docker from there: https://hub.docker.com/editions/community/docker-ce-desktop-windows?tab=description  
 Once Docker is installed you can deploy your application in a local container.
 
 ### Deployment
@@ -169,113 +169,50 @@ The following page should be displayed on your browser
 <img src="https://raw.githubusercontent.com/flecoqui/ARMStepByStep/master/Step_7_ASPDotNetCoreContainer/Docs/aspnetcontainerpage.png"/>
    
 
-You find further information about ASP.NET application running in Docker Container on this (page: https://github.com/dotnet/dotnet-docker/tree/master/samples/aspnetapp)[https://github.com/dotnet/dotnet-docker/tree/master/samples/aspnetapp] 
- 
+You find further information about ASP.NET application running in Docker Container on this page: https://github.com/dotnet/dotnet-docker/tree/master/samples/aspnetapp
 
-## CREATE RESOURCE GROUP:
-1.	Azure Subscription
-https://azure.microsoft.com/en-us/free/
-2.	install .NetCore 2.2 SDK
-https://dotnet.microsoft.com/download 
- 
-3.	Docker installed on your local machine
-https://docs.docker.com/docker-for-windows/install/
+## DEPLOY A .NET CORE ASP.NET REACT REDUX APPLICATION IN A CONTAINER RUNNING IN AZURE
 
-https://hub.docker.com/editions/community/docker-ce-desktop-windows?tab=description 
-Download Docker
-Install Docker
- 
+### Pre-requisite
+First you need an Azure subscription.
+You can subscribe here:  https://azure.microsoft.com/en-us/free/
+Moreover, we will use Azure CLI v2.0 to deploy the resources in Azure.
+You can install Azure CLI on your machine running Linux, MacOS or Windows from hre: https://docs.microsoft.com/en-us/cli/azure/install-azure-cli?view=azure-cli-latest 
 
- 
+You can get further information about Azure Kubernetes Service here: https://docs.microsoft.com/fr-fr/azure/aks/kubernetes-walkthrough 
+You can check the sample application here: https://github.com/Azure-Samples/azure-voting-app-redis
 
-After few minutes Docker should run
-
- 
-
-https://docs.microsoft.com/fr-fr/azure/container-service/kubernetes/container-service-kubernetes-walkthrough 
-
-
-https://github.com/Azure-Samples/azure-voting-app-redis 
-
-dotnet new reactredux
-
-dotnet build
-
-
-Deploy locally :
-cd samples
-cd aspnetcoreapp\aspnetcoreapp
-dotnet run
-
-dotnet publish -c Release -o out
-cd out
-dotnet aspnetapp.dll
-
-
-https://localhost:5001/ 
-
-
-Deploy in local Docker
-
-cd samples
-cd aspnetcoreapp 
-docker build --pull -t aspnetcoreapp .
-docker run --name aspnetcore_sample --rm -it -p 8000:80 aspnetcoreapp 
-
-
-http://localhost:8000/
-
-
-
-https://github.com/dotnet/dotnet-docker/tree/master/samples/aspnetapp 
-
-
-
-BUILD DOCKER IMAGE
+### BUILDING A DOCKER IMAGE
+Before deploying your application in a container running in Azure, you need to create a container image and deploy it in the cloud with Azure Container Registry:
 https://docs.microsoft.com/en-us/azure/container-registry/container-registry-tutorial-quick-task
 
-cd aspnetcoreapp\
-Folder wih dockerfile
 
-az group create --resource-group testacrrg --location eastus2
-az acr create --resource-group testacrrg --name testacreu2  --sku Standard --location eastus2  
+1. Open a command shell window in the project folder  
 
 
-az acr build --registry testacreu2   --image aspnetcorereactredux:v1 .
+        C:\git\me\ARMStepByStep\Step_7_ASPDotNetCoreContainer\aspnetcoreapp> 
 
+2. Check if the Dockerfile file is present in this folder.
+
+
+        C:\git\me\ARMStepByStep\Step_7_ASPDotNetCoreContainer\aspnetcoreapp> az group create --resource-group testacrrg --location eastus2
+        C:\git\me\ARMStepByStep\Step_7_ASPDotNetCoreContainer\aspnetcoreapp> az acr create --resource-group testacrrg --name testacreu2  --sku Standard --location eastus2  
+        C:\git\me\ARMStepByStep\Step_7_ASPDotNetCoreContainer\aspnetcoreapp> az acr build --registry testacreu2   --image aspnetcorereactredux:v1 .
+        C:\git\me\ARMStepByStep\Step_7_ASPDotNetCoreContainer\aspnetcoreapp> az keyvault create --resource-group testacrrg --name testacrkv
  
-
-az keyvault create --resource-group testacrrg --name testacrkv
- 
-
-# Create service principal, store its password in AKV (the registry *password*)
-az keyvault secret set  --vault-name testacrkv --name testacreu2-pull-pwd --value $(az ad sp create-for-rbac --name testacreu2-pull --scopes $(az acr show --name testacreu2 --query id --output tsv) --role reader --query password --output tsv)
-
- 
-
-az ad sp create-for-rbac --name testacreu2-pull --scopes  /subscriptions/e5c9fc83-fbd0-4368-9cb6-1b5823479b6d/resourceGroups/testacrrg/providers/Microsoft.ContainerRegistry/registries/testacreu2 --role reader --query password --output tsv
-
- 
-
-az keyvault secret set  --vault-name testacrkv --name testacreu2-pull-pwd --value 783c8982-1c2b-4048-a70f-c9a21f5eba8f 
-
- 
+### Create service principal, store its password in AKV (the registry *password*)
 
 
-az keyvault secret set --vault-name testacrkv --name testacreu2-pull-usr --value $(az ad sp show --id http://testacreu2-pull --query appId --output tsv)
-
- 
-
-az ad sp show --id http://testacreu2-pull --query appId --output tsv
+        az keyvault secret set  --vault-name testacrkv --name testacreu2-pull-pwd --value $(az ad sp create-for-rbac --name testacreu2-pull --scopes $(az acr show --name testacreu2 --query id --output tsv) --role reader --query password --output tsv)
+        az ad sp create-for-rbac --name testacreu2-pull --scopes  /subscriptions/e5c9fc83-fbd0-4368-9cb6-1b5823479b6d/resourceGroups/testacrrg/providers/Microsoft.ContainerRegistry/registries/testacreu2 --role reader --query password --output tsv
+        az keyvault secret set  --vault-name testacrkv --name testacreu2-pull-pwd --value 783c8982-1c2b-4048-a70f-c9a21f5eba8f 
+        az keyvault secret set --vault-name testacrkv --name testacreu2-pull-usr --value $(az ad sp show --id http://testacreu2-pull --query appId --output tsv)
+        az ad sp show --id http://testacreu2-pull --query appId --output tsv
  
 40e21cbe-9b70-469f-80da-4369e02ebc58
 
-az keyvault secret set --vault-name testacrkv --name testacreu2-pull-usr �-value 40e21cbe-9b70-469f-80da-4369e02ebc58
- 
-
-
-
-az container create \
+        az keyvault secret set --vault-name testacrkv --name testacreu2-pull-usr �-value 40e21cbe-9b70-469f-80da-4369e02ebc58
+ az container create \
     --resource-group $RES_GROUP \
     --name acr-tasks \
     --image $ACR_NAME.azurecr.io/helloacrtasks:v1 \
@@ -285,9 +222,6 @@ az container create \
     --dns-name-label acr-tasks-$ACR_NAME \
     --query "{FQDN:ipAddress.fqdn}" \
     --output table
-
-
-
 az container create \
     --resource-group testacrrg \
     --name acr-tasks \
@@ -326,13 +260,9 @@ az container delete --resource-group $RES_GROUP --name acr-tasks
 
 az container delete --resource-group testacrrg --name acr-tasks
 
- 
-
-
-
 https://docs.microsoft.com/fr-fr/azure/aks/tutorial-kubernetes-deploy-cluster
 
-Deploy AKS:
+### Deploy AKS:
 
 az ad sp create-for-rbac --skip-assignment
  
