@@ -1,4 +1,4 @@
-# Deployment of a ASP.Net Core Rect Redux container locally or in Azure
+# Deployment of a ASP.Net Core React Redux container locally or on Azure
 
 <a href="https://portal.azure.com/#create/Microsoft.Template/uri/https%3A%2F%2Fraw.githubusercontent.com%2Fflecoqui%2FARMStepByStep%2Fmaster%2FStep_6_DataScienceVMTemplate%2F101-vm-data-science-windows%2Fazuredeploy.json" target="_blank">
     <img src="http://azuredeploy.net/deploybutton.png"/>
@@ -7,7 +7,69 @@
     <img src="http://armviz.io/visualizebutton.png"/>
 </a>
 
+## OVERVIEW
+This sample application show how to:
+1.   Build a .Net Core ASP.NET React Redux application
+2.   Deploy the same application locally on your machine 
+3.   Deploy the same application locally in a Docker Container
+4.   Deploy the same application in Container in Azure Kubernetes Service (AKS)
 
+## BUILD A .NET CORE ASP.NET REACT REDUX APPLICATION
+
+### Pre-requisite
+In order to build a .Net Core Application you need to install the latest .NetCore SDK on your machine running Linux, MacOS or Windows 10.
+You can download the SDK from [there: https://azure.microsoft.com/en-us/free/](https://azure.microsoft.com/en-us/free/)
+Once the .Net Core SDK is installed you can build an ASP.Net Core Application.
+
+### Creating the application
+You can either clone the application from this repository, in that case you need to clone the following repository: 
+[https://github.com/flecoqui/ARMStepByStep.git](https://github.com/flecoqui/ARMStepByStep.git) 
+and open a command shell window in the folder <InstallationFolder>\Step_7_ASPDotNetCoreContainer\aspnetcoreapp\aspnetcoreapp
+
+or create the application from the .Net Core SDK:
+
+1. Open a command shell window
+2. Change Directory to your dev directory
+
+    C:\users\me>
+    C:\users\me> cd \dev
+    C:\dev> 
+
+3. Create a directory called aspnetcoreapp 
+
+    C:\dev> mkdir aspnetcoreapp
+    C:\dev> 
+
+
+4. Change directory to aspnetcoreapp 
+
+    C:\dev> cd aspnetcoreapp
+    C:\dev\aspnetcoreapp> 
+
+5. Create the application using the following command: 
+
+    C:\dev\aspnetcoreapp> dotnet new reactredux 
+
+
+
+### Building the application
+
+1. Build the application using the following command: 
+
+    C:\dev\aspnetcoreapp> dotnet build 
+
+### Running the application locally
+
+1. Run the application using the following command: 
+
+    C:\dev\aspnetcoreapp> dotnet run 
+
+2. With your favorite Browser open the url http://localhost:5000 
+As it's an http connection and not a https connection, the browser will block the connection click on a link displayed (Advanced or Details) on the screen to open an http connection with the ASP.Net Core Application running on your machine.
+
+<img src="http://azuredeploy.net/deploybutton.png"/>
+   
+## CREATE RESOURCE GROUP:
 1.	Azure Subscription
 https://azure.microsoft.com/en-us/free/
 2.	install .NetCore 2.2 SDK
@@ -105,7 +167,7 @@ az ad sp show --id http://testacreu2-pull --query appId --output tsv
  
 40e21cbe-9b70-469f-80da-4369e02ebc58
 
-az keyvault secret set --vault-name testacrkv --name testacreu2-pull-usr –-value 40e21cbe-9b70-469f-80da-4369e02ebc58
+az keyvault secret set --vault-name testacrkv --name testacreu2-pull-usr ï¿½-value 40e21cbe-9b70-469f-80da-4369e02ebc58
  
 
 
@@ -213,7 +275,7 @@ kubectl get nodes
  
 
 
-Deployer l’image
+Deployer lï¿½image
 az acr list --resource-group  testacrrg
 
  
@@ -269,7 +331,7 @@ With Azure CLI you can deploy this VM with 2 command lines:
 ## CREATE RESOURCE GROUP:
 **Azure CLI:** azure group create "ResourceGroupName" "RegionName"
 
-**Azure CLI 2.0:** az group create –n "ResourceGroupName" -l "RegionName"
+**Azure CLI 2.0:** az group create ï¿½n "ResourceGroupName" -l "RegionName"
 
 For instance:
 
