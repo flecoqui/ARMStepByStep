@@ -81,6 +81,97 @@ The following page should be displayed on your browser
 
 <img src="https://raw.githubusercontent.com/flecoqui/ARMStepByStep/master/Step_7_ASPDotNetCoreContainer/Docs/aspnetpage.png"/>
    
+
+## DEPLOY A .NET CORE ASP.NET REACT REDUX APPLICATION LOCALLY
+
+1. Build a release build of the application  
+
+
+        C:\dev\aspnetcoreapp> dotnet publish -c Release -o out
+
+
+
+2. Run a release build of the application  
+
+
+        C:\dev\aspnetcoreapp> cd out
+        C:\dev\aspnetcoreapp\out> dotnet aspnetcoreapp.dll
+
+
+3. With your favorite Browser open the url http://localhost:5000 
+As it's an http connection and not a https connection, the browser will block the connection click on a link displayed (Advanced or Details) on the screen to open an http connection with the ASP.Net Core Application running on your machine.
+The following page should be displayed on your browser
+
+<img src="https://raw.githubusercontent.com/flecoqui/ARMStepByStep/master/Step_7_ASPDotNetCoreContainer/Docs/aspnetpage.png"/>
+   
+
+
+## DEPLOY A .NET CORE ASP.NET REACT REDUX APPLICATION IN A LOCAL CONTAINER
+
+### Pre-requisite
+First you need to install Docker on your machine:
+You can download Docker for Windows from (there https://docs.docker.com/docker-for-windows/install/)[https://docs.docker.com/docker-for-windows/install/]
+You can also download Docker from (there: https://hub.docker.com/editions/community/docker-ce-desktop-windows?tab=description )[https://hub.docker.com/editions/community/docker-ce-desktop-windows?tab=description] 
+Once Docker is installed you can deploy your application in a local container.
+
+### Deployment
+
+1. Open a command shell window in the project folder  
+
+
+        C:\git\me\ARMStepByStep\Step_7_ASPDotNetCoreContainer\aspnetcoreapp> 
+
+2. Check if the Dockerfile file is present in this folder.
+
+
+        FROM microsoft/dotnet:2.2-sdk AS build
+        WORKDIR /app
+
+        # Add nodeJs required for reactjs
+        RUN curl -sL https://deb.nodesource.com/setup_10.x |  bash -
+        RUN apt-get install -y nodejs
+
+        # copy csproj and restore as distinct layers
+        COPY aspnetcoreapp/*.csproj ./aspnetcoreapp/
+        WORKDIR /app/aspnetcoreapp
+        RUN dotnet restore
+
+        # copy everything else and build app
+        WORKDIR /app
+        COPY aspnetcoreapp/. ./aspnetcoreapp/
+        WORKDIR /app/aspnetcoreapp
+        RUN dotnet publish -c Release -o out
+
+        FROM microsoft/dotnet:2.2-aspnetcore-runtime AS runtime
+        WORKDIR /app
+        COPY --from=build /app/aspnetcoreapp/out ./
+        ENTRYPOINT ["dotnet", "aspnetcoreapp.dll"]
+
+
+2. Build a container from the application using the following command:
+
+
+        C:\git\me\ARMStepByStep\Step_7_ASPDotNetCoreContainer\aspnetcoreapp> docker build --pull -t aspnetcoreapp .
+
+
+
+3. Run the application container using the following command:  
+
+
+        C:\git\me\ARMStepByStep\Step_7_ASPDotNetCoreContainer\aspnetcoreapp> docker run --name aspnetcore_sample --rm -it -p 8000:80 aspnetcoreapp 
+
+
+
+4. With your favorite Browser open the url http://localhost:8000/ 
+As it's an http connection and not a https connection, the browser will block the connection click on a link displayed (Advanced or Details) on the screen to open an http connection with the ASP.Net Core Application running on your machine.
+The following page should be displayed on your browser
+
+<img src="https://raw.githubusercontent.com/flecoqui/ARMStepByStep/master/Step_7_ASPDotNetCoreContainer/Docs/aspnetcontainerpage.png"/>
+   
+
+You find further information about ASP.NET application running in Docker Container on this (page: https://github.com/dotnet/dotnet-docker/tree/master/samples/aspnetapp)[https://github.com/dotnet/dotnet-docker/tree/master/samples/aspnetapp] 
+ 
+
 ## CREATE RESOURCE GROUP:
 1.	Azure Subscription
 https://azure.microsoft.com/en-us/free/
