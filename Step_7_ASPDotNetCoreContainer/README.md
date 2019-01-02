@@ -182,7 +182,7 @@ You can install Azure CLI on your machine running Linux, MacOS or Windows from h
 You can get further information about Azure Kubernetes Service here: https://docs.microsoft.com/fr-fr/azure/aks/kubernetes-walkthrough .</p>
 You can check the sample application here: https://github.com/Azure-Samples/azure-voting-app-redis
 
-### BUILDING A DOCKER IMAGE
+### BUILDING A CONTAINER IMAGE IN AZURE
 Before deploying your application in a container running in Azure, you need to create a container image and deploy it in the cloud with Azure Container Registry:
 https://docs.microsoft.com/en-us/azure/container-registry/container-registry-tutorial-quick-task
 
@@ -206,13 +206,13 @@ For instance:
         C:\git\me\ARMStepByStep\Step_7_ASPDotNetCoreContainer\aspnetcoreapp> az acr create --resource-group acrrg --name acreu2  --sku Standard --location eastus2  
 
 
-4. Build the image and register it in the new Azure Container Registry with Azure CLI using the following command:</p>
+4. Build the container image and register it in the new Azure Container Registry with Azure CLI using the following command:</p>
 **Azure CLI 2.0:** az acr build --registry "ACRName" --image "ImageName:ImageTag" "localFolder"</p>
 For instance:
 
         C:\git\me\ARMStepByStep\Step_7_ASPDotNetCoreContainer\aspnetcoreapp> az acr build --registry acreu2   --image aspnetcorereactredux:v1 .
 
-After few minutes, the image should be availble in the new registry:
+After few minutes, the image should be available in the new registry:
 
 For instance:
 
@@ -236,10 +236,49 @@ For instance:
         
         Run ID: ch1 was successful after 3m0s
 
+### DEPLOYING TO AZURE CONTAINER INSTANCES (ACI)
+Your container image is now available from your container registry in Azure.
+You can deploy this image from your registry immediately.
 
-### Create service principal, store its password in AKV (the registry *password*)
+#### CONFIGURING REGISTRY AUTHENTICATION
+In this sections, you create an Azure Key Vault and Service Principal, then deploy the container to Azure Container Instances (ACI) using Service Principal's credentials.
 
-        C:\git\me\ARMStepByStep\Step_7_ASPDotNetCoreContainer\aspnetcoreapp> az keyvault create --resource-group testacrrg --name testacrkv
+1. Create a key vault with Azure CLI using the following command:</p>
+**Azure CLI 2.0:** az keyvault create --resource-group "ResourceGroupName" --name "AzureKeyVaultName"</p>
+For instance:
+
+
+        C:\git\me\ARMStepByStep\Step_7_ASPDotNetCoreContainer\aspnetcoreapp> az keyvault create --resource-group acrrg --name acrkv
+ 
+2. Create a Service Principal Azure CLI using the following commands:</p>
+In order to create the Service Principal you need to know the ID associated with the new Azure Container Registry, you can display this information with the following command:
+**Azure CLI 2.0:** az acr show --name "ACRName" --query id --output tsv</p>
+For instance:
+
+
+        C:\git\me\ARMStepByStep\Step_7_ASPDotNetCoreContainer\aspnetcoreapp> az acr show --name acreu2 --query id --output tsv
+
+
+**Azure CLI 2.0:** az ad sp create-for-rbac --name "ACRName" --scopes "ACRID" --role acrpull --query password --output tsv</p>
+For instance:
+
+
+        C:\git\me\ARMStepByStep\Step_7_ASPDotNetCoreContainer\aspnetcoreapp> az ad sp create-for-rbac --name acreu2 --scopes /subscriptions/xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx/resourceGroups/acrrg/providers/Microsoft.ContainerRegistry/registries/acreu2 --role acrpull --query password --output tsv
+
+ After few seconds the results is displayed:
+
+        Changing "acreu2" to a valid URI of "http://acreu2", which is the required format used for service principal names
+        Retrying role assignment creation: 1/36
+        Retrying role assignment creation: 2/36
+        52018750-2458-4e7b-a62e-8778486ebf55
+
+
+4. Store credentials with Azure CLI using the following command:</p>
+**Azure CLI 2.0:** az keyvault create --resource-group "ResourceGroupName" --name "AzureKeyVaultName"</p>
+For instance:
+
+
+        C:\git\me\ARMStepByStep\Step_7_ASPDotNetCoreContainer\aspnetcoreapp> az keyvault create --resource-group acrrg --name acrkv
  
 
 
@@ -302,7 +341,7 @@ az container delete --resource-group testacrrg --name acr-tasks
 
 https://docs.microsoft.com/fr-fr/azure/aks/tutorial-kubernetes-deploy-cluster
 
-### Deploy AKS:
+### DEPLOYING TO AZURE KUBERNETES SERVICE (AKS)
 
 az ad sp create-for-rbac --skip-assignment
  
