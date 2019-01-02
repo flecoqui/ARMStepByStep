@@ -193,21 +193,21 @@ https://docs.microsoft.com/en-us/azure/container-registry/container-registry-tut
         C:\git\me\ARMStepByStep\Step_7_ASPDotNetCoreContainer\aspnetcoreapp> 
 
 2. Create a resource group with Azure CLI using the following command:</p>
-**Azure CLI 2.0:** az group create --resource-group "ResourceGroupName" --location "RegionName"
+**Azure CLI 2.0:** az group create --resource-group "ResourceGroupName" --location "RegionName"</p>
 For instance:
 
 
         C:\git\me\ARMStepByStep\Step_7_ASPDotNetCoreContainer\aspnetcoreapp> az group create --resource-group acrrg --location eastus2
 
 3. Create an Azure Container Registry with Azure CLI using the following command:</p>
-**Azure CLI 2.0:** az acr create --resource-group "ResourceGroupName" --name "ACRName" --sku "ACRSku" --location "RegionName"
+**Azure CLI 2.0:** az acr create --resource-group "ResourceGroupName" --name "ACRName" --sku "ACRSku" --location "RegionName"</p>
 For instance:
 
         C:\git\me\ARMStepByStep\Step_7_ASPDotNetCoreContainer\aspnetcoreapp> az acr create --resource-group testacrrg --name testacreu2  --sku Standard --location eastus2  
 
 
 4. Build the image and register it in the new Azure Container Registry with Azure CLI using the following command:</p>
-**Azure CLI 2.0:** az acr build --registry "ACRName" --image "ImageName:Version" "localFolder"
+**Azure CLI 2.0:** az acr build --registry "ACRName" --image "ImageName:Version" "localFolder"</p>
 For instance:
 
         C:\git\me\ARMStepByStep\Step_7_ASPDotNetCoreContainer\aspnetcoreapp> az acr build --registry testacreu2   --image aspnetcorereactredux:v1 .
