@@ -330,7 +330,7 @@ After few seconds the result (Password) is displayed:
 
 
 3. With the AppID and the Password you can now deploy the image in a container with Azure CLI using the following command:
-**Azure CLI 2.0:** az container create --resource-group  --name "ContainerGroupName" --image "ACRName".azurecr.io/"ImageName:ImageTag" --registry-login-server "ACRName".azurecr.io --registry-username "ServicePrincipalAppID" --registry-password "ServicePrincipalPassword" --dns-name-label "InstanceName" --query "{FQDN:ipAddress.fqdn}" --output table </p>
+**Azure CLI 2.0:** az container create --resource-group "ResourceGroupName"  --name "ContainerGroupName" --image "ACRName".azurecr.io/"ImageName:ImageTag" --registry-login-server "ACRName".azurecr.io --registry-username "ServicePrincipalAppID" --registry-password "ServicePrincipalPassword" --dns-name-label "InstanceName" --query "{FQDN:ipAddress.fqdn}" --output table </p>
 For instance:
 
 
@@ -358,20 +358,42 @@ For instance:
 
         http://acr-tasks-acreu2.eastus2.azurecontainer.io/ 
 
+#### VERIFYING THE CONTAINER RUNNING IN AZURE
+You can recevie on your local machine the logs from the Container running in Azure with Azure CLI with the following command: 
+**Azure CLI 2.0:** az container attach --resource-group "ResourceGroupName" --name "ContainerGroupName"  </p>
+For instance:
 
 
-az container attach --resource-group testacrrg --name acr-tasks 
-
- 
+        C:\git\me\ARMStepByStep\Step_7_ASPDotNetCoreContainer\aspnetcoreapp> az container attach --resource-group acrrg --name acr-tasks
 
 
-az container delete --resource-group $RES_GROUP --name acr-tasks
+#### CLEANING UP RESOURCES 
+You can clean up all the resources create during this chapter with the following commands:
 
-az container delete --resource-group testacrrg --name acr-tasks
+1. Delete the Azure Container Instance with Azure CLI using the following command:
+**Azure CLI 2.0:** az container delete --resource-group "ResourceGroupName" --name "ContainerGroupName"  </p>
+For instance:
 
-https://docs.microsoft.com/fr-fr/azure/aks/tutorial-kubernetes-deploy-cluster
+        C:\git\me\ARMStepByStep\Step_7_ASPDotNetCoreContainer\aspnetcoreapp> az container delete --resource-group acrrg --name acr-tasks
+
+
+2. Delete the resource group  with Azure CLI using the following command:
+**Azure CLI 2.0:** az group delete --resource-group "ResourceGroupName"   </p>
+For instance:
+
+        C:\git\me\ARMStepByStep\Step_7_ASPDotNetCoreContainer\aspnetcoreapp> az group delete --resource-group acrrg 
+
+
+
+3. Delete the Service Principal with Azure CLI using the following command:
+**Azure CLI 2.0:** az ad sp delete --id http://"ACRSPName"  </p>
+For instance:
+
+        C:\git\me\ARMStepByStep\Step_7_ASPDotNetCoreContainer\aspnetcoreapp> az ad sp delete --id http://acrspeu2 
+
 
 ### DEPLOYING TO AZURE KUBERNETES SERVICE (AKS)
+https://docs.microsoft.com/fr-fr/azure/aks/tutorial-kubernetes-deploy-cluster 
 
 az ad sp create-for-rbac --skip-assignment
  
