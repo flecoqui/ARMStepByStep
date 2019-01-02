@@ -250,15 +250,15 @@ For instance:
 
         C:\git\me\ARMStepByStep\Step_7_ASPDotNetCoreContainer\aspnetcoreapp> az keyvault create --resource-group acrrg --name acrkv
  
-2. Create a Service Principal Azure CLI using the following commands:</p>
-In order to create the Service Principal you need to know the ID associated with the new Azure Container Registry, you can display this information with the following command:
+2. Displaying the ID associated with the new Azure Container Registry using the following command:</p>
+In order to create the Service Principal you need to know the ID associated with the new Azure Container Registry, you can display this information with the following command:</p>
 **Azure CLI 2.0:** az acr show --name "ACRName" --query id --output tsv</p>
 For instance:
 
 
         C:\git\me\ARMStepByStep\Step_7_ASPDotNetCoreContainer\aspnetcoreapp> az acr show --name acreu2 --query id --output tsv
 
-
+3. Create a Service Principal Azure CLI using the following command:</p>
 **Azure CLI 2.0:** az ad sp create-for-rbac --name "ACRName" --scopes "ACRID" --role acrpull --query password --output tsv</p>
 For instance:
 
