@@ -250,7 +250,7 @@ For instance:
 
         C:\git\me\ARMStepByStep\Step_7_ASPDotNetCoreContainer\aspnetcoreapp> az keyvault create --resource-group acrrg --name acrkv
  
-2. Displaying the ID associated with the new Azure Container Registry using the following command:</p>
+2. Display the ID associated with the new Azure Container Registry using the following command:</p>
 In order to create the Service Principal you need to know the ID associated with the new Azure Container Registry, you can display this information with the following command:</p>
 **Azure CLI 2.0:** az acr show --name "ACRName" --query id --output tsv</p>
 For instance:
@@ -258,77 +258,107 @@ For instance:
 
         C:\git\me\ARMStepByStep\Step_7_ASPDotNetCoreContainer\aspnetcoreapp> az acr show --name acreu2 --query id --output tsv
 
-3. Create a Service Principal Azure CLI using the following command:</p>
-**Azure CLI 2.0:** az ad sp create-for-rbac --name "ACRName" --scopes "ACRID" --role acrpull --query password --output tsv</p>
+3. Create a Service Principal and display the password with Azure CLI using the following command:</p>
+**Azure CLI 2.0:** az ad sp create-for-rbac --name "ACRSPName" --scopes "ACRID" --role acrpull --query password --output tsv</p>
 For instance:
 
 
-        C:\git\me\ARMStepByStep\Step_7_ASPDotNetCoreContainer\aspnetcoreapp> az ad sp create-for-rbac --name acreu2 --scopes /subscriptions/xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx/resourceGroups/acrrg/providers/Microsoft.ContainerRegistry/registries/acreu2 --role acrpull --query password --output tsv
+        C:\git\me\ARMStepByStep\Step_7_ASPDotNetCoreContainer\aspnetcoreapp> az ad sp create-for-rbac --name acrspeu2 --scopes /subscriptions/xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx/resourceGroups/acrrg/providers/Microsoft.ContainerRegistry/registries/acreu2 --role acrpull --query password --output tsv
 
-After few seconds the results is displayed:
+After few seconds the result (ACR Password) is displayed:
 
-        Changing "acreu2" to a valid URI of "http://acreu2", which is the required format used for service principal names
+        Changing "spacreu2" to a valid URI of "http://acrspeu2", which is the required format used for service principal names
         Retrying role assignment creation: 1/36
         Retrying role assignment creation: 2/36
-        52018750-2458-4e7b-a62e-8778486ebf55
+        yyyyyyyy-yyyy-yyyy-yyyy-yyyyyyyyyyyy
 
 
-4. Store credentials with Azure CLI using the following command:</p>
-**Azure CLI 2.0:** az keyvault create --resource-group "ResourceGroupName" --name "AzureKeyVaultName"</p>
+4. Store credentials (ACR password) with Azure CLI using the following command:</p>
+**Azure CLI 2.0:** az keyvault secret set  --vault-name "AzureKeyVaultName" --name "PasswordSecretName" --value "ServicePrincipalPassword" </p>
 For instance:
 
 
-        C:\git\me\ARMStepByStep\Step_7_ASPDotNetCoreContainer\aspnetcoreapp> az keyvault create --resource-group acrrg --name acrkv
+        C:\git\me\ARMStepByStep\Step_7_ASPDotNetCoreContainer\aspnetcoreapp> az keyvault secret set  --vault-name acrkv --name acrspeu2-pull-pwd --value yyyyyyyy-yyyy-yyyy-yyyy-yyyyyyyyyyyy
+ 
+5. Display the Application ID associated with the new Service Principal with Azure CLI using the following command:</p>
+**Azure CLI 2.0:** az ad sp show --id http://"ACRSPName" --query appId --output tsv</p>
+For instance:
+
+
+        C:\git\me\ARMStepByStep\Step_7_ASPDotNetCoreContainer\aspnetcoreapp> az ad sp show --id http://acrspeu2 --query appId --output tsv
+
+After few seconds the result (ACR AppId) is displayed:
+
+        wwwwwwww-wwww-wwww-wwww-wwwwwwwwwwww
+
+
+
+6. Store credentials (ACR AppID) with Azure CLI using the following command:</p>
+**Azure CLI 2.0:** az keyvault secret set  --vault-name "AzureKeyVaultName" --name "AppIDSecretName" --value "ServicePrincipalAppID" </p>
+For instance:
+
+
+        C:\git\me\ARMStepByStep\Step_7_ASPDotNetCoreContainer\aspnetcoreapp> az keyvault secret set  --vault-name acrkv --name acrspeu2-pull-usr --value wwwwwwww-wwww-wwww-wwww-wwwwwwwwwwww
  
 
+The Azure Key Vault contains now the Azure Container Registry AppID and Password. 
 
-        az keyvault secret set  --vault-name testacrkv --name testacreu2-pull-pwd --value $(az ad sp create-for-rbac --name testacreu2-pull --scopes $(az acr show --name testacreu2 --query id --output tsv) --role reader --query password --output tsv)
-        az ad sp create-for-rbac --name testacreu2-pull --scopes  /subscriptions/e5c9fc83-fbd0-4368-9cb6-1b5823479b6d/resourceGroups/testacrrg/providers/Microsoft.ContainerRegistry/registries/testacreu2 --role reader --query password --output tsv
-        az keyvault secret set  --vault-name testacrkv --name testacreu2-pull-pwd --value 783c8982-1c2b-4048-a70f-c9a21f5eba8f 
-        az keyvault secret set --vault-name testacrkv --name testacreu2-pull-usr --value $(az ad sp show --id http://testacreu2-pull --query appId --output tsv)
-        az ad sp show --id http://testacreu2-pull --query appId --output tsv
+#### DEPLOYING THE IMAGE IN AZURE CONTAINER INSTANCE
+You can now deploy the image using the credentials stored in Azure Key Vault.
+
+1. You need first to retrieve the AppID from the Azure Key Vault with Azure CLI using the following command:
+**Azure CLI 2.0:** az keyvault secret show --vault-name "AzureKeyVaultName" --name "AppIDSecretName" --query value -o tsv  </p>
+For instance:
+
+
+        C:\git\me\ARMStepByStep\Step_7_ASPDotNetCoreContainer\aspnetcoreapp> az keyvault secret show --vault-name acrkv --name acrspeu2-pull-usr --query value -o tsv
  
-40e21cbe-9b70-469f-80da-4369e02ebc58
+After few seconds the result (ACR AppId) is displayed:
 
-        az keyvault secret set --vault-name testacrkv --name testacreu2-pull-usr �-value 40e21cbe-9b70-469f-80da-4369e02ebc58
- az container create \
-    --resource-group $RES_GROUP \
-    --name acr-tasks \
-    --image $ACR_NAME.azurecr.io/helloacrtasks:v1 \
-    --registry-login-server $ACR_NAME.azurecr.io \
-    --registry-username $(az keyvault secret show --vault-name $AKV_NAME --name $ACR_NAME-pull-usr --query value -o tsv) \
-    --registry-password $(az keyvault secret show --vault-name $AKV_NAME --name $ACR_NAME-pull-pwd --query value -o tsv) \
-    --dns-name-label acr-tasks-$ACR_NAME \
-    --query "{FQDN:ipAddress.fqdn}" \
-    --output table
-az container create \
-    --resource-group testacrrg \
-    --name acr-tasks \
-    --image testacreu2.azurecr.io/aspnetcorereactredux:v1 \
-    --registry-login-server testacreu2.azurecr.io \
-    --registry-username $(az keyvault secret show --vault-name testacrkv --name testacreu2-pull-usr --query value -o tsv) \
-    --registry-password $(az keyvault secret show --vault-name testacrkv --name testacreu2-pull-pwd --query value -o tsv) \
-    --dns-name-label acr-tasks-testacreu2 \
-    --query "{FQDN:ipAddress.fqdn}" \
-    --output table
+        wwwwwwww-wwww-wwww-wwww-wwwwwwwwwwww
 
-az container create --resource-group testacrrg --name acr-tasks --image testacreu2.azurecr.io/aspnetcorereactredux:v1 --registry-login-server testacreu2.azurecr.io --registry-username $(az keyvault secret show --vault-name testacrkv --name testacreu2-pull-usr --query value -o tsv) --registry-password $(az keyvault secret show --vault-name testacrkv --name testacreu2-pull-pwd --query value -o tsv) --dns-name-label acr-tasks-testacreu2 --query "{FQDN:ipAddress.fqdn}" --output table
+2. You need also to retrieve the Password from the Azure Key Vault with Azure CLI using the following command:
+**Azure CLI 2.0:** az keyvault secret show --vault-name "AzureKeyVaultName" --name "PasswordSecretName" --query value -o tsv  </p>
+For instance:
 
-az keyvault secret show --vault-name testacrkv --name testacreu2-pull-usr --query value -o tsv
+
+        C:\git\me\ARMStepByStep\Step_7_ASPDotNetCoreContainer\aspnetcoreapp> az keyvault secret show --vault-name acrkv --name acrspeu2-pull-pwd --query value -o tsv
  
+After few seconds the result (Password) is displayed:
 
-40e21cbe-9b70-469f-80da-4369e02ebc58
+        yyyyyyyy-yyyy-yyyy-yyyy-yyyyyyyyyyyy
 
-az keyvault secret show --vault-name testacrkv --name testacreu2-pull-pwd --query value -o tsv
+
+3. With the AppID and the Password you can now deploy the image in a container with Azure CLI using the following command:
+**Azure CLI 2.0:** az container create --resource-group  --name "ContainerGroupName" --image "ACRName".azurecr.io/"ImageName:ImageTag" --registry-login-server "ACRName".azurecr.io --registry-username "ServicePrincipalAppID" --registry-password "ServicePrincipalPassword" --dns-name-label "InstanceName" --query "{FQDN:ipAddress.fqdn}" --output table </p>
+For instance:
+
+
+        C:\git\me\ARMStepByStep\Step_7_ASPDotNetCoreContainer\aspnetcoreapp> az container create --resource-group acrrg --name acr-tasks --image acreu2.azurecr.io/aspnetcorereactredux:v1 --registry-login-server acreu2.azurecr.io --registry-username d384b6b7-9d83-4f8c-9fa0-8909b117e89d --registry-password 52018750-2458-4e7b-a62e-8778486ebf55 --dns-name-label acr-tasks-acreu2 --query "{FQDN:ipAddress.fqdn}" --output table
  
+After few seconds the command returns the DNS Name of the new instance:
 
-783c8982-1c2b-4048-a70f-c9a21f5eba8f
-az container create --resource-group testacrrg --name acr-tasks --image testacreu2.azurecr.io/aspnetcorereactredux:v1 --registry-login-server testacreu2.azurecr.io --registry-username 40e21cbe-9b70-469f-80da-4369e02ebc58 --registry-password 783c8982-1c2b-4048-a70f-c9a21f5eba8f --dns-name-label acr-tasks-testacreu2 --query "{FQDN:ipAddress.fqdn}" --output table
+        ------------------------------------------
+        "InstanceName"."RegionName".azurecontainer.io
+
+For instance:
+
+        ------------------------------------------
+        acr-tasks-acreu2.eastus2.azurecontainer.io
+
+4. With your favorite Browser open the url http://"InstanceDNSName"/ 
+As it's an http connection and not a https connection, the browser will block the connection click on a link displayed (Advanced or Details) on the screen to open an http connection with the ASP.Net Core Application running on your machine.
+The following page should be displayed on your browser
+
+<img src="https://raw.githubusercontent.com/flecoqui/ARMStepByStep/master/Step_7_ASPDotNetCoreContainer/Docs/aspnetacipage.png"/>
+   
 
 
- 
+For instance:
 
-http://acr-tasks-testacreu2.eastus2.azurecontainer.io/
+        http://acr-tasks-acreu2.eastus2.azurecontainer.io/ 
+
+
 
 az container attach --resource-group testacrrg --name acr-tasks 
 
