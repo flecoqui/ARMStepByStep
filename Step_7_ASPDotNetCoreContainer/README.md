@@ -265,7 +265,7 @@ For instance:
 
         C:\git\me\ARMStepByStep\Step_7_ASPDotNetCoreContainer\aspnetcoreapp> az ad sp create-for-rbac --name acreu2 --scopes /subscriptions/xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx/resourceGroups/acrrg/providers/Microsoft.ContainerRegistry/registries/acreu2 --role acrpull --query password --output tsv
 
-        After few seconds the results is displayed:
+After few seconds the results is displayed:
 
         Changing "acreu2" to a valid URI of "http://acreu2", which is the required format used for service principal names
         Retrying role assignment creation: 1/36
