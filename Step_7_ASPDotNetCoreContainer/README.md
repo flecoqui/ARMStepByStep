@@ -79,7 +79,7 @@ or create the application from the .Net Core SDK:
 As it's an http connection and not a https connection, the browser will block the connection click on a link displayed (Advanced or Details) on the screen to open an http connection with the ASP.Net Core Application running on your machine.
 The following page should be displayed on your browser
 
-<img src="https://raw.githubusercontent.com/flecoqui/ARMStepByStep/master/Step_7_ASPDotNetCoreContainer/Docs/aspnetpage.png"/>
+     <img src="https://raw.githubusercontent.com/flecoqui/ARMStepByStep/master/Step_7_ASPDotNetCoreContainer/Docs/aspnetpage.png"/>
    
 
 ## DEPLOY A .NET CORE ASP.NET REACT REDUX APPLICATION LOCALLY
@@ -102,7 +102,7 @@ The following page should be displayed on your browser
 As it's an http connection and not a https connection, the browser will block the connection click on a link displayed (Advanced or Details) on the screen to open an http connection with the ASP.Net Core Application running on your machine.
 The following page should be displayed on your browser
 
-<img src="https://raw.githubusercontent.com/flecoqui/ARMStepByStep/master/Step_7_ASPDotNetCoreContainer/Docs/aspnetpage.png"/>
+     <img src="https://raw.githubusercontent.com/flecoqui/ARMStepByStep/master/Step_7_ASPDotNetCoreContainer/Docs/aspnetpage.png"/>
    
 
 
@@ -166,10 +166,10 @@ Once Docker is installed you can deploy your application in a local container.
 As it's an http connection and not a https connection, the browser will block the connection click on a link displayed (Advanced or Details) on the screen to open an http connection with the ASP.Net Core Application running on your machine.
 The following page should be displayed on your browser
 
-<img src="https://raw.githubusercontent.com/flecoqui/ARMStepByStep/master/Step_7_ASPDotNetCoreContainer/Docs/aspnetcontainerpage.png"/>
+     <img src="https://raw.githubusercontent.com/flecoqui/ARMStepByStep/master/Step_7_ASPDotNetCoreContainer/Docs/aspnetcontainerpage.png"/>
    
 
-You find further information about ASP.NET application running in Docker Container on this page: https://github.com/dotnet/dotnet-docker/tree/master/samples/aspnetapp
+     You'll find further information about ASP.NET application running in Docker Container on this page: https://github.com/dotnet/dotnet-docker/tree/master/samples/aspnetapp
 
 ## DEPLOY A .NET CORE ASP.NET REACT REDUX APPLICATION IN A CONTAINER RUNNING IN AZURE
 
@@ -212,9 +212,9 @@ For instance:
 
         C:\git\me\ARMStepByStep\Step_7_ASPDotNetCoreContainer\aspnetcoreapp> az acr build --registry acreu2   --image aspnetcorereactredux:v1 .
 
-After few minutes, the image should be available in the new registry:
+     After few minutes, the image should be available in the new registry:
 
-For instance:
+     For instance:
 
         2019/01/02 09:36:09
         - image:
@@ -265,7 +265,7 @@ For instance:
 
         C:\git\me\ARMStepByStep\Step_7_ASPDotNetCoreContainer\aspnetcoreapp> az ad sp create-for-rbac --name acrspeu2 --scopes /subscriptions/xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx/resourceGroups/acrrg/providers/Microsoft.ContainerRegistry/registries/acreu2 --role acrpull --query password --output tsv
 
-After few seconds the result (ACR Password) is displayed:
+     After few seconds the result (ACR Password) is displayed:
 
         Changing "spacreu2" to a valid URI of "http://acrspeu2", which is the required format used for service principal names
         Retrying role assignment creation: 1/36
@@ -287,7 +287,7 @@ For instance:
 
         C:\git\me\ARMStepByStep\Step_7_ASPDotNetCoreContainer\aspnetcoreapp> az ad sp show --id http://acrspeu2 --query appId --output tsv
 
-After few seconds the result (ACR AppId) is displayed:
+     After few seconds the result (ACR AppId) is displayed:
 
         wwwwwwww-wwww-wwww-wwww-wwwwwwwwwwww
 
@@ -301,7 +301,7 @@ For instance:
         C:\git\me\ARMStepByStep\Step_7_ASPDotNetCoreContainer\aspnetcoreapp> az keyvault secret set  --vault-name acrkv --name acrspeu2-pull-usr --value wwwwwwww-wwww-wwww-wwww-wwwwwwwwwwww
  
 
-The Azure Key Vault contains now the Azure Container Registry AppID and Password. 
+     The Azure Key Vault contains now the Azure Container Registry AppID and Password. 
 
 #### DEPLOYING THE IMAGE IN AZURE CONTAINER INSTANCE
 You can now deploy the image using the credentials stored in Azure Key Vault.
@@ -313,7 +313,7 @@ For instance:
 
         C:\git\me\ARMStepByStep\Step_7_ASPDotNetCoreContainer\aspnetcoreapp> az keyvault secret show --vault-name acrkv --name acrspeu2-pull-usr --query value -o tsv
  
-After few seconds the result (ACR AppId) is displayed:
+     After few seconds the result (ACR AppId) is displayed:
 
         wwwwwwww-wwww-wwww-wwww-wwwwwwwwwwww
 
@@ -324,7 +324,7 @@ For instance:
 
         C:\git\me\ARMStepByStep\Step_7_ASPDotNetCoreContainer\aspnetcoreapp> az keyvault secret show --vault-name acrkv --name acrspeu2-pull-pwd --query value -o tsv
  
-After few seconds the result (Password) is displayed:
+     After few seconds the result (Password) is displayed:
 
         yyyyyyyy-yyyy-yyyy-yyyy-yyyyyyyyyyyy
 
@@ -336,12 +336,12 @@ For instance:
 
         C:\git\me\ARMStepByStep\Step_7_ASPDotNetCoreContainer\aspnetcoreapp> az container create --resource-group acrrg --name acr-tasks --image acreu2.azurecr.io/aspnetcorereactredux:v1 --registry-login-server acreu2.azurecr.io --registry-username d384b6b7-9d83-4f8c-9fa0-8909b117e89d --registry-password 52018750-2458-4e7b-a62e-8778486ebf55 --dns-name-label acr-tasks-acreu2 --query "{FQDN:ipAddress.fqdn}" --output table
  
-After few seconds the command returns the DNS Name of the new instance:
+     After few seconds the command returns the DNS Name of the new instance:
 
         ------------------------------------------
         "InstanceName"."RegionName".azurecontainer.io
 
-For instance:
+     For instance:
 
         ------------------------------------------
         acr-tasks-acreu2.eastus2.azurecontainer.io
@@ -350,11 +350,11 @@ For instance:
 As it's an http connection and not a https connection, the browser will block the connection click on a link displayed (Advanced or Details) on the screen to open an http connection with the ASP.Net Core Application running on your machine.
 The following page should be displayed on your browser
 
-<img src="https://raw.githubusercontent.com/flecoqui/ARMStepByStep/master/Step_7_ASPDotNetCoreContainer/Docs/aspnetacipage.png"/>
+     <img src="https://raw.githubusercontent.com/flecoqui/ARMStepByStep/master/Step_7_ASPDotNetCoreContainer/Docs/aspnetacipage.png"/>
    
 
 
-For instance:
+     For instance:
 
         http://acr-tasks-acreu2.eastus2.azurecontainer.io/ 
 
@@ -385,14 +385,14 @@ For instance:
 
           C:\git\me\ARMStepByStep\Step_7_ASPDotNetCoreContainer\aspnetcoreapp> az ad sp create-for-rbac --skip-assignment
  
- The command returns the following information associated with the new Service Principal:
- - appID
- - displayName
- - name
- - password
- - tenant
+      The command returns the following information associated with the new Service Principal:
+      - appID
+      - displayName
+      - name
+      - password
+      - tenant
 
-For instance:
+     For instance:
 
 
           AppId                                 Password                            
@@ -409,9 +409,9 @@ For instance:
 
         C:\git\me\ARMStepByStep\Step_7_ASPDotNetCoreContainer\aspnetcoreapp> az acr show --name acreu2 --query id --output tsv
 
-The command returns ACR resource ID.
+     The command returns ACR resource ID.
 
-For instance:
+     For instance:
 
         /subscriptions/e5c9fc83-fbd0-4368-9cb6-1b5823479b6d/resourceGroups/acrrg/providers/Microsoft.ContainerRegistry/registries/acreu2
 
@@ -430,7 +430,7 @@ Now you can create the Kubernetes Cluster in Azure. </p>
 1. With the following Azure CLI command create the Azure Kubernetes Cluster:</p>
 **Azure CLI 2.0:** az aks create --resource-group "ResourceGroupName" --name "AKSClusterName" --node-count 1 --service-principal "SPAppID" --client-secret "SPPassword" --generate-ssh-keys </p>
 
-For instance:
+     For instance:
 
 
         az aks create --resource-group acrrg --name netcoreakscluster --node-count 1 --service-principal d604dc61-d8c0-41e2-803e-443415a62825   --client-secret 097df367-7472-4c23-96e1-9722e1d8270a --generate-ssh-keys
@@ -443,36 +443,33 @@ For instance:
 3. Connect the Kubernetes Command Line Client to your Cluster in Azure using the following Azure CLI command:
 **Azure CLI 2.0:** az aks get-credentials --resource-group "ResourceGroupName" --name "AKSClusterName" </p>
 
-For instance:
+     For instance:
 
         az aks get-credentials --resource-group acrrg --name netcoreakscluster
 
 
 4. Check the connection from the Kubernetes Command Line Client with the following command:
-**kubectl** kubectl get nodes
+**kubectl:** kubectl get nodes
 
-The commmand will return information about the Kuberentes nodes.
-
-For instance:
+     The commmand will return information about the Kuberentes nodes.
+     For instance:
 
         NAME                       STATUS    ROLES     AGE       VERSION
         aks-nodepool1-38201324-0   Ready     agent     16m       v1.9.11
 
-You are now connected to your cluster from your local machine.
+     You are now connected to your cluster from your local machine.
 
 #### DEPLOYING THE IMAGE TO A KUBERNETES CLUSTER IN AZURE
 
 1. You can list the Azure Container Registry per Resource Group using the following Azure CLI command: </p>
 **Azure CLI 2.0:** az acr list --resource-group  "ResourceGroupName" </p>
-
 For instance: 
  
 
         az acr list --resource-group  testacrrg
 
- it returns the list of ACR associated with this resource group.
-
- For instance:
+     it returns the list of ACR associated with this resource group.
+     For instance:
 
         NAME    RESOURCE GROUP    LOCATION    SKU       LOGIN SERVER       CREATION DATE         ADMIN ENABLED
         ------  ----------------  ----------  --------  -----------------  --------------------  ---------------
@@ -482,15 +479,15 @@ For instance:
 2. You can list the repository in each Azure Container Registry  using the following Azure CLI command: </p>
 **Azure CLI 2.0:** az acr repository list --name "ACRName" --output table </p>
 
-For instance: 
+     For instance: 
  
 
         az acr repository list --name acreu2 --output table
 
 
-It returns the list of images.
+     It returns the list of images.
 
-For instance:
+     For instance:
 
         Result
         --------------------
@@ -498,9 +495,9 @@ For instance:
 
 
 3. You can now deploy the image with Kubernetes Command Line Client: </p>
-**kubectl** kubectl run "ImageDeploymentName" --image "ACRName".azurecr.io/"ImageName":v1 --port 80 </p>
+**kubectl:** kubectl run "ImageDeploymentName" --image "ACRName".azurecr.io/"ImageName":v1 --port 80 </p>
 
-For instance: 
+     For instance: 
  
 
         kubectl run aspnetcorereactredux --image acreu2.azurecr.io/aspnetcorereactredux:v1 --port 80 
@@ -508,9 +505,9 @@ For instance:
 
 
 4. Expose your container to the internet with Kubernetes Command Line Client: </p>
-**kubectl** kubectl expose deployment "ImageDeploymentName" --type="LoadBalancer" --port=80 </p>
+**kubectl:** kubectl expose deployment "ImageDeploymentName" --type="LoadBalancer" --port=80 </p>
 
-For instance: 
+     For instance: 
  
 
         kubectl expose deployment aspnetcorereactredux --type="LoadBalancer" --port=80 
@@ -518,21 +515,21 @@ For instance:
 
 
 5. You can check the creation of the services with Kubernetes Command Line Client: </p>
-**kubectl** kubectl get services </p>
+**kubectl:** kubectl get services </p>
 
-For instance: 
+     For instance: 
  
 
         kubectl get services 
 
-After the deployment of the image the public IP address is not yet available, the EXTERNAL-IP field is still in pending state.
+     After the deployment of the image the public IP address is not yet available, the EXTERNAL-IP field is still in pending state.
 
 
         NAME                   TYPE           CLUSTER-IP    EXTERNAL-IP   PORT(S)        AGE
         aspnetcorereactredux   LoadBalancer   10.0.15.205   <pending>     80:30301/TCP   45s
         kubernetes             ClusterIP      10.0.0.1      <none>        443/TCP        37m
 
-After few minutes the public IP address is available:
+     After few minutes the public IP address is available:
 
 
         NAME                   TYPE           CLUSTER-IP    EXTERNAL-IP    PORT(S)        AGE
@@ -546,11 +543,11 @@ After few minutes the public IP address is available:
 As it's an http connection and not a https connection, the browser will block the connection click on a link displayed (Advanced or Details) on the screen to open an http connection with the ASP.Net Core Application running on your machine.
 The following page should be displayed on your browser
 
-<img src="https://raw.githubusercontent.com/flecoqui/ARMStepByStep/master/Step_7_ASPDotNetCoreContainer/Docs/aspnetacipage.png"/>
+     <img src="https://raw.githubusercontent.com/flecoqui/ARMStepByStep/master/Step_7_ASPDotNetCoreContainer/Docs/aspnetacipage.png"/>
    
 
 
-For instance:
+     For instance:
 
         http://104.210.7.67/ 
  
@@ -558,32 +555,32 @@ For instance:
 #### DEPLOYING THE IMAGE TO A KUBERNETES CLUSTER IN AZURE WITH THE YAML FILE
 
 1. You can deploy the same image in Azure Kubernetes Cluster using the YAML file aspnetcoreapp.yaml with Kubernetes Command Line Client: </p>
-**kubectl** kubectl apply -f aspnetcoreapp.yaml </p>
+**kubectl:** kubectl apply -f aspnetcoreapp.yaml </p>
 
-For instance: 
+     For instance: 
 
           C:\git\me\ARMStepByStep\Step_7_ASPDotNetCoreContainer\aspnetcoreapp> kubectl apply -f aspnetcoreapp.yaml
  
-Before launching this command you need to edit the file aspnetcoreapp.yaml and update the line 28, and replace the field <AzureContainerRegistryName> with the Azure Container Registry Name. 
+     Before launching this command you need to edit the file aspnetcoreapp.yaml and update the line 28, and replace the field <AzureContainerRegistryName> with the Azure Container Registry Name. 
 
       - image: <AzureContainerRegistryName>.azurecr.io/aspnetcorereactredux:v1
         name: aspnetcorereactredux
 
-For instance:
+     For instance:
 
       - image: acreu2.azurecr.io/aspnetcorereactredux:v1
         name: aspnetcorereactredux
 
 
 2. You can check the new deployment with Kubernetes Command Line Client: </p>
-**kubectl** kubectl get services </p>
+**kubectl:** kubectl get services </p>
 
-For instance: 
+     For instance: 
  
 
         kubectl get services
 
-This commands return a result like this one below:
+     This command returns a result like this one below:
 
 
         NAME                   TYPE           CLUSTER-IP    EXTERNAL-IP    PORT(S)        AGE
@@ -595,9 +592,9 @@ This commands return a result like this one below:
 
 
 1. You can list the pods associated with your AKS Deployment with Kubernetes Command Line Client: </p>
-**kubectl** kubectl get pods </p>
+**kubectl:** kubectl get pods </p>
 
-It returns the list of pods associated with your deployment for instance:
+     It returns the list of pods associated with your deployment for instance:
 
 
         NAME                                    READY     STATUS    RESTARTS   AGE
@@ -605,9 +602,9 @@ It returns the list of pods associated with your deployment for instance:
 
 
 2. You can scale up your AKS Deployment with Kubernetes Command Line Client: </p>
-**kubectl** kubectl scale deployment aspnetcorereactredux --replicas=4 </p>
+**kubectl:** kubectl scale deployment aspnetcorereactredux --replicas=4 </p>
 
-If you run the command "kubectl get pods" again, you'll see the 4 pods for instance:
+     If you run the command "kubectl get pods" again, you'll see the 4 pods for instance:
 
 
         NAME                                    READY     STATUS    RESTARTS   AGE
@@ -618,15 +615,15 @@ If you run the command "kubectl get pods" again, you'll see the 4 pods for insta
 
 
 3. You can test resiliency in deleting a pod with Kubernetes Command Line Client: </p>
-**kubectl** kubectl delete pod "PodName" </p>
+**kubectl:** kubectl delete pod "PodName" </p>
 
-For instance:
+     For instance:
 
 
         kubectl delete pod aspnetcorereactredux-5dcfbd44df-w9qbf
 
 
-If you run the command "kubectl get pods" again, you'll see the 1 pod terminating and one new pod, for instance:
+     If you run the command "kubectl get pods" again, you'll see the 1 pod terminating and one new pod, for instance:
 
 
         NAME                                    READY     STATUS        RESTARTS   AGE
