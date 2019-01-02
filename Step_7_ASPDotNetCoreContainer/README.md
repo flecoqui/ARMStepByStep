@@ -557,31 +557,53 @@ For instance:
 
 #### VERIFYING THE IMAGE DEPLOYMENT IN A KUBERNETES CLUSTER IN AZURE
 
+
+1. You can list the pods associated with your AKS Deployment with Kubernetes Command Line Client: </p>
+**kubectl** kubectl get pods </p>
+
+It returns the list of pods associated with your deployment for instance:
+
+
+        NAME                                    READY     STATUS    RESTARTS   AGE
+        aspnetcorereactredux-5dcfbd44df-wcfjx   1/1       Running   0          15m
+
+
+2. You can scale up your AKS Deployment with Kubernetes Command Line Client: </p>
+**kubectl** kubectl scale deployment aspnetcorereactredux --replicas=4 </p>
+
+If you run the command "kubectl get pods" again, you'll see the 4 pods for instance:
+
+
+        NAME                                    READY     STATUS    RESTARTS   AGE
+        aspnetcorereactredux-5dcfbd44df-h8wpc   1/1       Running   0          14s
+        aspnetcorereactredux-5dcfbd44df-tkkl6   1/1       Running   0          14s
+        aspnetcorereactredux-5dcfbd44df-w9qbf   1/1       Running   0          14s
+        aspnetcorereactredux-5dcfbd44df-wcfjx   1/1       Running   0          15m
+
+
+3. You can test resiliency in deleting a pod with Kubernetes Command Line Client: </p>
+**kubectl** kubectl delete pod "PodName" </p>
+
+For instance:
+
+
+        kubectl delete pod aspnetcorereactredux-5dcfbd44df-w9qbf
+
+
+If you run the command "kubectl get pods" again, you'll see the 1 pod terminating and one new pod, for instance:
+
+
+        NAME                                    READY     STATUS        RESTARTS   AGE
+        aspnetcorereactredux-5dcfbd44df-2tkpv   1/1       Running       0          14s
+        aspnetcorereactredux-5dcfbd44df-w9qbf   0/1       Terminating   0          45s
+        aspnetcorereactredux-5dcfbd44df-h8wpc   1/1       Running       0          7m
+        aspnetcorereactredux-5dcfbd44df-tkkl6   1/1       Running       0          7m
+        aspnetcorereactredux-5dcfbd44df-wcfjx   1/1       Running       0          22m
+
+
 kubectl get all  --export=true  -o yaml
 
 kubectl apply -f aspnetcoreapp.yaml
-
-
-kubectl scale deployment aspnetcorereactredux --replicas=4
-
-
- 
-
-Test Resiliency
-
-kubectl get pods
-
-
-kubectl delete pod aspnetcorereactredux-684bfc8cc-2spjj
-
- 
-
-http://104.209.196.251/
-
-
-
-
-kubectl apply -f azure-vote-all-in-one-redis.yaml
 
 
 
