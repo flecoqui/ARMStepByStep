@@ -555,6 +555,42 @@ For instance:
         http://104.210.7.67/ 
  
 
+#### DEPLOYING THE IMAGE TO A KUBERNETES CLUSTER IN AZURE WITH THE YAML FILE
+
+1. You can deploy the same image in Azure Kubernetes Cluster using the YAML file aspnetcoreapp.yaml with Kubernetes Command Line Client: </p>
+**kubectl** kubectl apply -f aspnetcoreapp.yaml </p>
+
+For instance: 
+
+          C:\git\me\ARMStepByStep\Step_7_ASPDotNetCoreContainer\aspnetcoreapp> kubectl apply -f aspnetcoreapp.yaml
+ 
+Before launching this command you need to edit the file aspnetcoreapp.yaml and update the line 28, and replace the field <AzureContainerRegistryName> with the Azure Container Registry Name. 
+
+      - image: <AzureContainerRegistryName>.azurecr.io/aspnetcorereactredux:v1
+        name: aspnetcorereactredux
+
+For instance:
+
+      - image: acreu2.azurecr.io/aspnetcorereactredux:v1
+        name: aspnetcorereactredux
+
+
+2. You can check the new deployment with Kubernetes Command Line Client: </p>
+**kubectl** kubectl get services </p>
+
+For instance: 
+ 
+
+        kubectl get services
+
+This commands return a result like this one below:
+
+
+        NAME                   TYPE           CLUSTER-IP    EXTERNAL-IP    PORT(S)        AGE
+        aspnetcorereactredux   LoadBalancer   10.0.15.205   104.210.7.67   80:30756/TCP   2h
+        kubernetes             ClusterIP      10.0.0.1      <none>         443/TCP        3h
+
+
 #### VERIFYING THE IMAGE DEPLOYMENT IN A KUBERNETES CLUSTER IN AZURE
 
 
@@ -599,12 +635,6 @@ If you run the command "kubectl get pods" again, you'll see the 1 pod terminatin
         aspnetcorereactredux-5dcfbd44df-h8wpc   1/1       Running       0          7m
         aspnetcorereactredux-5dcfbd44df-tkkl6   1/1       Running       0          7m
         aspnetcorereactredux-5dcfbd44df-wcfjx   1/1       Running       0          22m
-
-
-kubectl get all  --export=true  -o yaml
-
-kubectl apply -f aspnetcoreapp.yaml
-
 
 
 ## CLEANING UP RESOURCES 
