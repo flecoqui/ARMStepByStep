@@ -175,11 +175,11 @@ You find further information about ASP.NET application running in Docker Contain
 
 ### Pre-requisite
 First you need an Azure subscription.
-You can subscribe here:  https://azure.microsoft.com/en-us/free/
+You can subscribe here:  https://azure.microsoft.com/en-us/free/ . </p>
 Moreover, we will use Azure CLI v2.0 to deploy the resources in Azure.
 You can install Azure CLI on your machine running Linux, MacOS or Windows from hre: https://docs.microsoft.com/en-us/cli/azure/install-azure-cli?view=azure-cli-latest 
 
-You can get further information about Azure Kubernetes Service here: https://docs.microsoft.com/fr-fr/azure/aks/kubernetes-walkthrough 
+You can get further information about Azure Kubernetes Service here: https://docs.microsoft.com/fr-fr/azure/aks/kubernetes-walkthrough .</p>
 You can check the sample application here: https://github.com/Azure-Samples/azure-voting-app-redis
 
 ### BUILDING A DOCKER IMAGE
