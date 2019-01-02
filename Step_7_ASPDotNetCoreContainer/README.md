@@ -306,7 +306,7 @@ The Azure Key Vault contains now the Azure Container Registry AppID and Password
 #### DEPLOYING THE IMAGE IN AZURE CONTAINER INSTANCE
 You can now deploy the image using the credentials stored in Azure Key Vault.
 
-1. You need first to retrieve the AppID from the Azure Key Vault with Azure CLI using the following command:
+1. You need first to retrieve the AppID from the Azure Key Vault with Azure CLI using the following command:</p>
 **Azure CLI 2.0:** az keyvault secret show --vault-name "AzureKeyVaultName" --name "AppIDSecretName" --query value -o tsv  </p>
 For instance:
 
@@ -317,7 +317,7 @@ After few seconds the result (ACR AppId) is displayed:
 
         wwwwwwww-wwww-wwww-wwww-wwwwwwwwwwww
 
-2. You need also to retrieve the Password from the Azure Key Vault with Azure CLI using the following command:
+2. You need also to retrieve the Password from the Azure Key Vault with Azure CLI using the following command:</p>
 **Azure CLI 2.0:** az keyvault secret show --vault-name "AzureKeyVaultName" --name "PasswordSecretName" --query value -o tsv  </p>
 For instance:
 
@@ -329,7 +329,7 @@ After few seconds the result (Password) is displayed:
         yyyyyyyy-yyyy-yyyy-yyyy-yyyyyyyyyyyy
 
 
-3. With the AppID and the Password you can now deploy the image in a container with Azure CLI using the following command:
+3. With the AppID and the Password you can now deploy the image in a container with Azure CLI using the following command:</p>
 **Azure CLI 2.0:** az container create --resource-group "ResourceGroupName"  --name "ContainerGroupName" --image "ACRName".azurecr.io/"ImageName:ImageTag" --registry-login-server "ACRName".azurecr.io --registry-username "ServicePrincipalAppID" --registry-password "ServicePrincipalPassword" --dns-name-label "InstanceName" --query "{FQDN:ipAddress.fqdn}" --output table </p>
 For instance:
 
@@ -359,7 +359,7 @@ For instance:
         http://acr-tasks-acreu2.eastus2.azurecontainer.io/ 
 
 #### VERIFYING THE CONTAINER RUNNING IN AZURE
-You can recevie on your local machine the logs from the Container running in Azure with Azure CLI with the following command: 
+You can recevie on your local machine the logs from the Container running in Azure with Azure CLI with the following command: </p>
 **Azure CLI 2.0:** az container attach --resource-group "ResourceGroupName" --name "ContainerGroupName"  </p>
 For instance:
 
@@ -367,95 +367,195 @@ For instance:
         C:\git\me\ARMStepByStep\Step_7_ASPDotNetCoreContainer\aspnetcoreapp> az container attach --resource-group acrrg --name acr-tasks
 
 
-#### CLEANING UP RESOURCES 
-You can clean up all the resources create during this chapter with the following commands:
 
-1. Delete the Azure Container Instance with Azure CLI using the following command:
-**Azure CLI 2.0:** az container delete --resource-group "ResourceGroupName" --name "ContainerGroupName"  </p>
-For instance:
-
-        C:\git\me\ARMStepByStep\Step_7_ASPDotNetCoreContainer\aspnetcoreapp> az container delete --resource-group acrrg --name acr-tasks
-
-
-2. Delete the resource group  with Azure CLI using the following command:
-**Azure CLI 2.0:** az group delete --resource-group "ResourceGroupName"   </p>
-For instance:
-
-        C:\git\me\ARMStepByStep\Step_7_ASPDotNetCoreContainer\aspnetcoreapp> az group delete --resource-group acrrg 
-
-
-
-3. Delete the Service Principal with Azure CLI using the following command:
-**Azure CLI 2.0:** az ad sp delete --id http://"ACRSPName"  </p>
-For instance:
-
-        C:\git\me\ARMStepByStep\Step_7_ASPDotNetCoreContainer\aspnetcoreapp> az ad sp delete --id http://acrspeu2 
 
 
 ### DEPLOYING TO AZURE KUBERNETES SERVICE (AKS)
+Using the same container image in the Azure Container Registry you can deploy the same container image in Azure Kubernetes Service (AKS).</p>
+You'll find further information here:</p>
 https://docs.microsoft.com/fr-fr/azure/aks/tutorial-kubernetes-deploy-cluster 
 
-az ad sp create-for-rbac --skip-assignment
+
+#### CREATING SERVICE PRINCIPAL FOR AKS DEPLOYMENT
+
+1. With Azure CLI create an Service Principal:
+**Azure CLI 2.0:** az ad sp create-for-rbac --skip-assignment </p>
+For instance:
+
+
+          C:\git\me\ARMStepByStep\Step_7_ASPDotNetCoreContainer\aspnetcoreapp> az ad sp create-for-rbac --skip-assignment
+ 
+ The command returns the following information associated with the new Service Principal:
+ - appID
+ - displayName
+ - name
+ - password
+ - tenant
+
+For instance:
+
+
+          AppId                                 Password                            
+          ------------------------------------  ------------------------------------
+          d604dc61-d8c0-41e2-803e-443415a62825  097df367-7472-4c23-96e1-9722e1d8270a
+
+
+
+2. Display the ID associated with the new Azure Container Registry using the following command:</p>
+In order to allow the Service Principal to have access to the Azure Container Registry you need to display the ACR resource ID with the following command:</p>
+**Azure CLI 2.0:** az acr show --name "ACRName" --query id --output tsv</p>
+For instance:
+
+
+        C:\git\me\ARMStepByStep\Step_7_ASPDotNetCoreContainer\aspnetcoreapp> az acr show --name acreu2 --query id --output tsv
+
+The command returns ACR resource ID.
+
+For instance:
+
+        /subscriptions/e5c9fc83-fbd0-4368-9cb6-1b5823479b6d/resourceGroups/acrrg/providers/Microsoft.ContainerRegistry/registries/acreu2
+
+
+3. Allow the Service Principal to have access to the Azure Container Registry with the following command:</p>
+**Azure CLI 2.0:** az role assignment create --assignee "AppID" --scope "ACRReourceID" --role Reader
+ For instance:
+
+        C:\git\me\ARMStepByStep\Step_7_ASPDotNetCoreContainer\aspnetcoreapp> az role assignment create --assignee d604dc61-d8c0-41e2-803e-443415a62825 --scope /subscriptions/e5c9fc83-fbd0-4368-9cb6-1b5823479b6d/resourceGroups/acrrg/providers/Microsoft.ContainerRegistry/registries/acreu2 --role Reader
+
+
+#### CREATING A KUBERNETES CLUSTER
+Now you can create the Kubernetes Cluster in Azure. </p>
+
+
+1. With the following Azure CLI command create the Azure Kubernetes Cluster:</p>
+**Azure CLI 2.0:** az aks create --resource-group "ResourceGroupName" --name "AKSClusterName" --node-count 1 --service-principal "SPAppID" --client-secret "SPPassword" --generate-ssh-keys </p>
+
+For instance:
+
+
+        az aks create --resource-group acrrg --name netcoreakscluster --node-count 1 --service-principal d604dc61-d8c0-41e2-803e-443415a62825   --client-secret 097df367-7472-4c23-96e1-9722e1d8270a --generate-ssh-keys
+
+ 
+2. After few minutes, the Cluster is deployed. To connect to the cluster from your local computer, you use the Kubernetes Command Line Client. Use the following Azure CLI command to install the Kubernetes Command Line Client:
+**Azure CLI 2.0:** az aks install-cli </p>
+
+
+3. Connect the Kubernetes Command Line Client to your Cluster in Azure using the following Azure CLI command:
+**Azure CLI 2.0:** az aks get-credentials --resource-group "ResourceGroupName" --name "AKSClusterName" </p>
+
+For instance:
+
+        az aks get-credentials --resource-group acrrg --name netcoreakscluster
+
+
+4. Check the connection from the Kubernetes Command Line Client with the following command:
+**kubectl** kubectl get nodes
+
+The commmand will return information about the Kuberentes nodes.
+
+For instance:
+
+        NAME                       STATUS    ROLES     AGE       VERSION
+        aks-nodepool1-38201324-0   Ready     agent     16m       v1.9.11
+
+You are now connected to your cluster from your local machine.
+
+#### DEPLOYING THE IMAGE TO A KUBERNETES CLUSTER IN AZURE
+
+1. You can list the Azure Container Registry per Resource Group using the following Azure CLI command: </p>
+**Azure CLI 2.0:** az acr list --resource-group  "ResourceGroupName" </p>
+
+For instance: 
  
 
-678ca0ab-31ba-405e-8392-245946a19d79
+        az acr list --resource-group  testacrrg
 
-69d408bb-dd2c-47a1-8e14-063a3cbb36f5
-az acr show --resource-group myResourceGroup --name <acrName> --query "id" --output tsv
+ it returns the list of ACR associated with this resource group.
 
-az acr show --resource-group testacrrg --name testacreu2 --query "id" --output tsv
+ For instance:
+
+        NAME    RESOURCE GROUP    LOCATION    SKU       LOGIN SERVER       CREATION DATE         ADMIN ENABLED
+        ------  ----------------  ----------  --------  -----------------  --------------------  ---------------
+        acreu2  acrrg             eastus2     Standard  acreu2.azurecr.io  2019-01-02T09:31:12Z
+
+
+2. You can list the repository in each Azure Container Registry  using the following Azure CLI command: </p>
+**Azure CLI 2.0:** az acr repository list --name "ACRName" --output table </p>
+
+For instance: 
  
 
+        az acr repository list --name acreu2 --output table
 
 
-az role assignment create --assignee <appId> --scope <acrId> --role Reader
+It returns the list of images.
 
-/subscriptions/e5c9fc83-fbd0-4368-9cb6-1b5823479b6d/resourceGroups/testacrrg/providers/Microsoft.ContainerRegistry/registries/testacreu2 
+For instance:
 
-az role assignment create --assignee 678ca0ab-31ba-405e-8392-245946a19d79 --scope /subscriptions/e5c9fc83-fbd0-4368-9cb6-1b5823479b6d/resourceGroups/testacrrg/providers/Microsoft.ContainerRegistry/registries/testacreu2 --role Reader
+        Result
+        --------------------
+        aspnetcorereactredux
+
+
+3. You can now deploy the image with Kubernetes Command Line Client: </p>
+**kubectl** kubectl run "ImageDeploymentName" --image "ACRName".azurecr.io/"ImageName":v1 --port 80 </p>
+
+For instance: 
  
 
-az aks create   --resource-group myResourceGroup --name myAKSCluster --node-count 1 --service-principal <appId> --client-secret <password> --generate-ssh-keys
+        kubectl run aspnetcorereactredux --image acreu2.azurecr.io/aspnetcorereactredux:v1 --port 80 
 
-az aks create   --resource-group testacrrg --name testnetcoreakscluster --node-count 1 --service-principal 678ca0ab-31ba-405e-8392-245946a19d79  --client-secret 69d408bb-dd2c-47a1-8e14-063a3cbb36f5 --generate-ssh-keys
 
+
+4. Expose your container to the internet with Kubernetes Command Line Client: </p>
+**kubectl** kubectl expose deployment "ImageDeploymentName" --type="LoadBalancer" --port=80 </p>
+
+For instance: 
  
 
+        kubectl expose deployment aspnetcorereactredux --type="LoadBalancer" --port=80 
 
 
 
-az aks install-cli
+5. You can check the creation of the services with Kubernetes Command Line Client: </p>
+**kubectl** kubectl get services </p>
 
-
-az aks get-credentials --resource-group myResourceGroup --name myAKSCluster
-
-az aks get-credentials --resource-group testacrrg --name testnetcoreakscluster
-
+For instance: 
  
 
+        kubectl get services 
 
-kubectl get nodes
+After the deployment of the image the public IP address is not yet available, the EXTERNAL-IP field is still in pending state.
 
+
+        NAME                   TYPE           CLUSTER-IP    EXTERNAL-IP   PORT(S)        AGE
+        aspnetcorereactredux   LoadBalancer   10.0.15.205   <pending>     80:30301/TCP   45s
+        kubernetes             ClusterIP      10.0.0.1      <none>        443/TCP        37m
+
+After few minutes the public IP address is available:
+
+
+        NAME                   TYPE           CLUSTER-IP    EXTERNAL-IP    PORT(S)        AGE
+        aspnetcorereactredux   LoadBalancer   10.0.15.205   104.210.7.67   80:30301/TCP   2m
+        kubernetes             ClusterIP      10.0.0.1      <none>         443/TCP        38m
+
+
+
+
+6. With your favorite Browser open the url http://"EXTERNAL-IP"/ 
+As it's an http connection and not a https connection, the browser will block the connection click on a link displayed (Advanced or Details) on the screen to open an http connection with the ASP.Net Core Application running on your machine.
+The following page should be displayed on your browser
+
+<img src="https://raw.githubusercontent.com/flecoqui/ARMStepByStep/master/Step_7_ASPDotNetCoreContainer/Docs/aspnetacipage.png"/>
+   
+
+
+For instance:
+
+        http://104.210.7.67/ 
  
 
-
-Deployer l�image
-az acr list --resource-group  testacrrg
-
- 
-
-az acr repository list --name testacreu2 --output table
-
- 
-
-
-Deploy with kubectl: 
-
-kubectl run aspnetcorereactredux --image testacreu2.azurecr.io/aspnetcorereactredux:v1 --port 80 
-kubectl expose deployment aspnetcorereactredux --type="LoadBalancer" --port=80
-kubectl get services
-
- 
+#### VERIFYING THE IMAGE DEPLOYMENT IN A KUBERNETES CLUSTER IN AZURE
 
 kubectl get all  --export=true  -o yaml
 
@@ -485,54 +585,27 @@ kubectl apply -f azure-vote-all-in-one-redis.yaml
 
 
 
+## CLEANING UP RESOURCES 
+You can clean up all the resources create during this chapter with the following commands:</p>
 
-This template allows you to deploy a simple Windows Data Science VM, using the latest patched version. This will deploy in the region associated with Resource Group and the VM Size is one of the parameter.
-This template has been tested with the following Windows versions:
-## 2016-Datacenter
-This template allows you to deploy a simple Windows 2016 Data Science VM , using the latest patched version. This will deploy in the region associated with Resource Group and the VM Size is one of the parameter.
-With Azure CLI you can deploy this VM with 2 command lines:
-
-## CREATE RESOURCE GROUP:
-**Azure CLI:** azure group create "ResourceGroupName" "RegionName"
-
-**Azure CLI 2.0:** az group create �n "ResourceGroupName" -l "RegionName"
-
+1. Delete the Azure Container Instance with Azure CLI using the following command:</p>
+**Azure CLI 2.0:** az container delete --resource-group "ResourceGroupName" --name "ContainerGroupName"  </p>
 For instance:
 
-    azure group create datasciencevmrg eastus2
+        C:\git\me\ARMStepByStep\Step_7_ASPDotNetCoreContainer\aspnetcoreapp> az container delete --resource-group acrrg --name acr-tasks
 
-    az group create -n datasciencevmrg -l eastus2
 
-## ACCEPT THE TERMS FOR THE DEPLOYMENT OF THIS MARKET PLACE VM:
-
-**Azure CLI 2.0:** az vm image accept-terms --urn microsoft-ads:windows-data-science-vm:windows2016:latest
-
+2. Delete the resource group  with Azure CLI using the following command:</p>
+**Azure CLI 2.0:** az group delete --resource-group "ResourceGroupName"   </p>
 For instance:
 
-	az vm image accept-terms --urn microsoft-ads:windows-data-science-vm:windows2016:latest
+        C:\git\me\ARMStepByStep\Step_7_ASPDotNetCoreContainer\aspnetcoreapp> az group delete --resource-group acrrg 
 
 
 
-## DEPLOY THE VM:
-**Azure CLI:** azure group deployment create "ResourceGroupName" "DeploymentName"  -f azuredeploy.json -e azuredeploy.parameters.json*
-
-**Azure CLI 2.0:** az group deployment create -g "ResourceGroupName" -n "DeploymentName" --template-file "templatefile.json" --parameters @"templatefile.parameter..json"  --verbose -o json
-
+3. Delete the Service Principal with Azure CLI using the following command:</p>
+**Azure CLI 2.0:** az ad sp delete --id http://"ACRSPName"  </p>
 For instance:
 
-    azure group deployment create datasciencevmrg datasciencevmtest -f azuredeploy.json -e azuredeploy.parameters.json -vv
-
-	az group deployment create -g datasciencevmrg -n datasciencevmtest --template-file azuredeploy.json --parameter @azuredeploy.parameters.json --verbose -o json
-
-## DELETE THE RESOURCE GROUP:
-**Azure CLI:** azure group delete "ResourceGroupName" "RegionName"
-
-**Azure CLI 2.0:** az group delete -n "ResourceGroupName" "RegionName"
-
-For instance:
-
-    azure group delete datasciencevmrg eastus2
-	
-    az group delete -n datasciencevmrg 
-
+        C:\git\me\ARMStepByStep\Step_7_ASPDotNetCoreContainer\aspnetcoreapp> az ad sp delete --id http://acrspeu2 
 
