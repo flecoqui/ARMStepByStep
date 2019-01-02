@@ -203,14 +203,38 @@ For instance:
 **Azure CLI 2.0:** az acr create --resource-group "ResourceGroupName" --name "ACRName" --sku "ACRSku" --location "RegionName"</p>
 For instance:
 
-        C:\git\me\ARMStepByStep\Step_7_ASPDotNetCoreContainer\aspnetcoreapp> az acr create --resource-group testacrrg --name testacreu2  --sku Standard --location eastus2  
+        C:\git\me\ARMStepByStep\Step_7_ASPDotNetCoreContainer\aspnetcoreapp> az acr create --resource-group acrrg --name acreu2  --sku Standard --location eastus2  
 
 
 4. Build the image and register it in the new Azure Container Registry with Azure CLI using the following command:</p>
-**Azure CLI 2.0:** az acr build --registry "ACRName" --image "ImageName:Version" "localFolder"</p>
+**Azure CLI 2.0:** az acr build --registry "ACRName" --image "ImageName:ImageTag" "localFolder"</p>
 For instance:
 
-        C:\git\me\ARMStepByStep\Step_7_ASPDotNetCoreContainer\aspnetcoreapp> az acr build --registry testacreu2   --image aspnetcorereactredux:v1 .
+        C:\git\me\ARMStepByStep\Step_7_ASPDotNetCoreContainer\aspnetcoreapp> az acr build --registry acreu2   --image aspnetcorereactredux:v1 .
+
+After few minutes, the image should be availble in the new registry:
+
+For instance:
+
+        2019/01/02 09:36:09
+        - image:
+            registry: acreu2.azurecr.io
+            repository: aspnetcorereactredux
+            tag: v1
+            digest: sha256:13fc8dfd45366d6be1171029bd3a1576b17d2311ddeca1ed8b5a5ce1b58f6863
+          runtime-dependency:
+            registry: registry.hub.docker.com
+            repository: microsoft/dotnet
+            tag: 2.2-aspnetcore-runtime
+            digest: sha256:96bad363c0c833d9f927030c20a49d220f8c074193aebf1b0d71733e2886b8dd
+          buildtime-dependency:
+          - registry: registry.hub.docker.com
+            repository: microsoft/dotnet
+            tag: 2.2-sdk
+            digest: sha256:5f4e2fb3cf2b33a7bad1ebdf3db5961fbddb5d3c0214400a10facbdb6bf957bf
+          git: {}
+        
+        Run ID: ch1 was successful after 3m0s
 
 
 ### Create service principal, store its password in AKV (the registry *password*)
