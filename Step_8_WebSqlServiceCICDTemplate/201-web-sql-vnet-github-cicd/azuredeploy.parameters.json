@@ -1,0 +1,48 @@
+{
+  "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentParameters.json#",
+  "contentVersion": "1.0.0.0",
+  "parameters": {
+    "webSiteName": {
+      "value": "testwebsqlapp"
+    },
+    "hostingPlanName": {
+      "value": "testwebsqlappplan"
+    },
+    "skuName": {
+      "value": "S1"
+    },
+    "skuCapacity": {
+      "value": 1
+    },
+    "sqlServerName": {
+      "value": "testwebsqlsqlname"
+    },
+    "databaseName": {
+      "value": "sampledb"
+    },
+    "sqlAdministratorLogin": {
+      "value": "sqladmin"
+    },
+    "sqlAdministratorLoginPassword": {		
+      "value": "sqlP@ssw0rd"		
+    },	
+    "nsgName": {
+      "value": "testwebsqlnsg"		
+    },
+    "virtualNetworkName": {
+      "value": "testwebsqlvnet"		
+    },
+    "subnetName": {
+      "value": "testwebsqlsubnet"		
+    },
+    "storageAccountName": {
+      "value": "testwebsqlstorage"		
+    },
+    "repoURL": {
+      "value": "https://github.com/flecoqui/TestWebSqlApp.git"
+    },
+    "branch": {
+      "value": "master"
+    } 
+  }
+}

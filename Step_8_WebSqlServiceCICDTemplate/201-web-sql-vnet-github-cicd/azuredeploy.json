@@ -1,0 +1,584 @@
+{
+  "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+  "contentVersion": "1.0.0.0",
+  "parameters": {
+    "webSiteName": {
+      "type": "string",
+      "defaultValue": "websitename",
+      "metadata": {
+        "description": "The name of the web app that you wish to create."
+      }
+    },
+    "hostingPlanName": {
+      "type": "string",
+      "defaultValue": "hostingplanname",
+      "metadata": {
+        "description": "The name of the App Service plan to use for hosting the web app."
+      }
+    },
+    "skuName": {
+      "type": "string",
+      "defaultValue": "S1",
+      "allowedValues": [
+        "F1",
+        "D1",
+        "B1",
+        "B2",
+        "B3",
+        "S1",
+        "S2",
+        "S3",
+        "P1",
+        "P2",
+        "P3",
+        "P4"
+      ],
+      "metadata": {
+        "description": "Use S1 Sku minimum to get the connection with the VNET. Describes plan's pricing tier and instance size. Check details at https://azure.microsoft.com/en-us/pricing/details/app-service/"
+      }
+    },
+    "skuCapacity": {
+      "type": "int",
+      "defaultValue": 1,
+      "minValue": 1,
+      "metadata": {
+        "description": "Describes plan's instance count"
+      }
+    },
+    "sqlServerName": {
+      "type": "string",
+      "defaultValue": "sqlServerName",
+      "metadata": {
+        "description": "The SQL Server Name"
+      }
+    },
+    "databaseName": {
+      "type": "string",
+      "defaultValue": "sampledb",
+      "metadata": {
+        "description": "The Database Name"
+      }
+    },
+    "sqlAdministratorLogin": {
+      "type": "string",
+      "metadata": {
+        "description": "The admin user of the SQL Server"
+      }
+    },
+    "sqlAdministratorLoginPassword": {
+      "type": "securestring",
+      "metadata": {
+        "description": "The password of the admin user of the SQL Server"
+      }
+    },
+    "nsgName": {
+      "type": "string",
+      "metadata": {
+        "description": "The name of the Network Security Group"
+      }
+    },
+    "virtualNetworkName": {
+      "type": "string",
+      "metadata": {
+        "description": "The name of the Virtual Network "
+      }
+    },
+    "subnetName": {
+      "type": "string",
+      "metadata": {
+        "description": "The name of the subnet connected to Azure App Service"
+      }
+    },
+    "storageAccountName": {
+      "type": "string",
+      "metadata": {
+        "description": "The name of the Storage Account connected to subnet"
+      }
+    },
+    "repoURL": {
+      "type": "string",
+      "defaultValue": "https://github.com/flecoqui/TestWebSqlApp.git",
+      "metadata": {
+        "description": "The URL for the GitHub repository that contains the project to deploy."
+      }
+    },
+    "branch": {
+      "type": "string",
+      "defaultValue": "master",
+      "metadata": {
+        "description": "The branch of the GitHub repository to use."
+      }
+    },
+    "location": {
+      "type": "string",
+      "defaultValue": "[resourceGroup().location]",
+      "metadata": {
+        "description": "Location for all resources."
+      }
+    }
+  },
+  "variables": {
+  },
+  "resources": [
+    {
+      "type": "Microsoft.Network/networkSecurityGroups",
+      "name": "[parameters('nsgName')]",
+      "apiVersion": "2018-10-01",
+      "location": "[parameters('location')]",
+      "scale": null,
+      "properties": {
+          "securityRules": [],
+          "defaultSecurityRules": [
+              {
+                  "name": "AllowVnetInBound",
+                  "properties": {
+                      "description": "Allow inbound traffic from all VMs in VNET",
+                      "protocol": "*",
+                      "sourcePortRange": "*",
+                      "destinationPortRange": "*",
+                      "sourceAddressPrefix": "VirtualNetwork",
+                      "destinationAddressPrefix": "VirtualNetwork",
+                      "access": "Allow",
+                      "priority": 65000,
+                      "direction": "Inbound",
+                      "sourcePortRanges": [],
+                      "destinationPortRanges": [],
+                      "sourceAddressPrefixes": [],
+                      "destinationAddressPrefixes": []
+                  }
+              },
+              {
+                  "name": "AllowAzureLoadBalancerInBound",
+                  "properties": {
+                      "description": "Allow inbound traffic from azure load balancer",
+                      "protocol": "*",
+                      "sourcePortRange": "*",
+                      "destinationPortRange": "*",
+                      "sourceAddressPrefix": "AzureLoadBalancer",
+                      "destinationAddressPrefix": "*",
+                      "access": "Allow",
+                      "priority": 65001,
+                      "direction": "Inbound",
+                      "sourcePortRanges": [],
+                      "destinationPortRanges": [],
+                      "sourceAddressPrefixes": [],
+                      "destinationAddressPrefixes": []
+                  }
+              },
+              {
+                  "name": "DenyAllInBound",
+                  "properties": {
+                      "description": "Deny all inbound traffic",
+                      "protocol": "*",
+                      "sourcePortRange": "*",
+                      "destinationPortRange": "*",
+                      "sourceAddressPrefix": "*",
+                      "destinationAddressPrefix": "*",
+                      "access": "Deny",
+                      "priority": 65500,
+                      "direction": "Inbound",
+                      "sourcePortRanges": [],
+                      "destinationPortRanges": [],
+                      "sourceAddressPrefixes": [],
+                      "destinationAddressPrefixes": []
+                  }
+              },
+              {
+                  "name": "AllowVnetOutBound",
+                  "properties": {
+                      "description": "Allow outbound traffic from all VMs to all VMs in VNET",
+                      "protocol": "*",
+                      "sourcePortRange": "*",
+                      "destinationPortRange": "*",
+                      "sourceAddressPrefix": "VirtualNetwork",
+                      "destinationAddressPrefix": "VirtualNetwork",
+                      "access": "Allow",
+                      "priority": 65000,
+                      "direction": "Outbound",
+                      "sourcePortRanges": [],
+                      "destinationPortRanges": [],
+                      "sourceAddressPrefixes": [],
+                      "destinationAddressPrefixes": []
+                  }
+              },
+              {
+                  "name": "AllowInternetOutBound",
+                  "properties": {
+                      "description": "Allow outbound traffic from all VMs to Internet",
+                      "protocol": "*",
+                      "sourcePortRange": "*",
+                      "destinationPortRange": "*",
+                      "sourceAddressPrefix": "*",
+                      "destinationAddressPrefix": "Internet",
+                      "access": "Allow",
+                      "priority": 65001,
+                      "direction": "Outbound",
+                      "sourcePortRanges": [],
+                      "destinationPortRanges": [],
+                      "sourceAddressPrefixes": [],
+                      "destinationAddressPrefixes": []
+                  }
+              },
+              {
+                  "name": "DenyAllOutBound",
+                  "properties": {
+                      "description": "Deny all outbound traffic",
+                      "protocol": "*",
+                      "sourcePortRange": "*",
+                      "destinationPortRange": "*",
+                      "sourceAddressPrefix": "*",
+                      "destinationAddressPrefix": "*",
+                      "access": "Deny",
+                      "priority": 65500,
+                      "direction": "Outbound",
+                      "sourcePortRanges": [],
+                      "destinationPortRanges": [],
+                      "sourceAddressPrefixes": [],
+                      "destinationAddressPrefixes": []
+                  }
+              }
+          ]
+      },
+      "dependsOn": []
+  },
+  {
+      "type": "Microsoft.Network/virtualNetworks",
+      "name": "[parameters('virtualNetworkName')]",
+      "apiVersion": "2018-07-01",
+      "location": "[parameters('location')]",
+
+      "properties": {
+          "addressSpace": {
+              "addressPrefixes": [
+                  "10.0.0.0/16"
+              ]
+          },
+          "subnets": [
+              {
+                  "name": "[parameters('subnetName')]",
+                  "properties": {
+                      "addressPrefix": "10.0.1.0/24",
+                      "networkSecurityGroup": {
+                          "id": "[resourceId('Microsoft.Network/networkSecurityGroups', parameters('nsgName'))]"
+                      },
+                      "serviceAssociationLinks": [
+                        {
+                            "name": "AppServiceLink",
+                            "properties": {
+                                "linkedResourceType": "Microsoft.Web/serverfarms",
+                                "link": "[resourceId('Microsoft.Web/serverfarms', parameters('hostingPlanName'))]"
+                            }
+                        }
+                    ],
+                      "serviceEndpoints": [
+                        {
+                            "service": "Microsoft.Sql"
+                        },
+                        {
+                            "service": "Microsoft.Storage"
+                        }
+                    ],
+                    "delegations": [
+                        {
+                            "name" : "DelegationService",
+                            "properties": {
+                                "serviceName": "Microsoft.Web/serverFarms"
+                            }
+                        }
+                    ]
+                 }
+              }
+          ]
+      },
+      "dependsOn": [
+          "[resourceId('Microsoft.Network/networkSecurityGroups', parameters('nsgName'))]",
+          "[resourceId('Microsoft.Web/serverfarms', parameters('hostingPlanName'))]"
+      ]
+  },
+  
+  {
+      "type": "Microsoft.Web/sites/virtualNetworkConnections",
+      "name": "[concat(parameters('webSiteName'), '/', 'virtualNetworkConnection')]",
+      "apiVersion": "2016-08-01",
+      "location": "[parameters('location')]",
+      "scale": null,
+      "properties": {
+          "vnetResourceId": "[resourceId('Microsoft.Network/virtualNetworks/subnets', parameters('virtualNetworkName'), parameters('subnetName'))]",
+          "certThumbprint": null,
+          "certBlob": null,
+          "routes": null,
+          "resyncRequired": false,
+          "dnsServers": null,
+          "isSwift": true
+      },
+      "dependsOn": [
+          "[resourceId('Microsoft.Web/sites', parameters('webSiteName'))]",
+          "[resourceId('Microsoft.Network/virtualNetworks', parameters('virtualNetworkName'))]"
+      ]
+  },
+  {
+    "type": "Microsoft.Storage/storageAccounts",
+    "sku": {
+        "name": "Standard_LRS",
+        "tier": "Standard"
+    },
+    "kind": "StorageV2",
+    "name": "[parameters('storageAccountName')]",
+    "apiVersion": "2018-07-01",
+    "location": "[parameters('location')]",
+    "properties": {
+        "networkAcls": {
+          "bypass": "AzureServices",
+          "virtualNetworkRules": [
+            {
+                "id": "[resourceId('Microsoft.Network/virtualNetworks/subnets', parameters('virtualNetworkName'), parameters('subnetName'))]",
+                "action": "Allow"
+            }
+          ],
+          "ipRules": [],
+          "defaultAction": "Deny"
+        },
+        "supportsHttpsTrafficOnly": true,
+        "encryption": {
+            "services": {
+                "file": {
+                    "enabled": true
+                },
+                "blob": {
+                    "enabled": true
+                }
+            },
+            "keySource": "Microsoft.Storage"
+        },
+        "accessTier": "Cool"
+    },
+    "dependsOn": [
+      "[resourceId('Microsoft.Network/virtualNetworks', parameters('virtualNetworkName'))]"
+    ]
+},
+    {
+      "name": "[parameters('sqlServerName')]",
+      "type": "Microsoft.Sql/servers",
+      "location": "[parameters('location')]",
+      "tags": {
+        "displayName": "SqlServer"
+      },
+      "apiVersion": "2014-04-01",
+      "properties": {
+        "administratorLogin": "[parameters('sqlAdministratorLogin')]",
+        "administratorLoginPassword": "[parameters('sqlAdministratorLoginPassword')]",
+        "version": "12.0"
+      },
+      "resources": [
+        {
+          "name": "[parameters('databaseName')]",
+          "type": "databases",
+          "location": "[parameters('location')]",
+          "tags": {
+            "displayName": "Database"
+          },
+          "apiVersion": "2015-01-01",
+          "dependsOn": [
+            "[parameters('sqlServerName')]"
+          ],
+          "properties": {
+            "edition": "Basic",
+            "collation": "SQL_Latin1_General_CP1_CI_AS",
+            "maxSizeBytes": "1073741824",
+            "requestedServiceObjectiveName": "Basic"
+          }
+        },
+        {
+          "type": "firewallrules",
+          "apiVersion": "2014-04-01",
+          "dependsOn": [
+            "[parameters('sqlServerName')]"
+          ],
+          "location": "[parameters('location')]",
+          "name": "AllowAllWindowsAzureIps",
+          "properties": {
+            "endIpAddress": "0.0.0.0",
+            "startIpAddress": "0.0.0.0"
+          }
+        },        
+        {
+          "name": "sqlvnetrule",
+          "type": "virtualNetworkRules",
+          "apiVersion": "2015-05-01-preview",
+          "properties": {
+              "virtualNetworkSubnetId": "[resourceId('Microsoft.Network/virtualNetworks/subnets', parameters('virtualNetworkName'), parameters('subnetName'))]",
+              "ignoreMissingVnetServiceEndpoint": true
+          },
+          "dependsOn": [
+            "[resourceId('Microsoft.Sql/servers', parameters('sqlServerName'))]"
+          ]
+      }
+      ],
+      "dependsOn": [
+        "[resourceId('Microsoft.Network/virtualNetworks', parameters('virtualNetworkName'))]"
+      ]
+    },
+    {
+      "apiVersion": "2016-03-01",
+      "name": "[parameters('hostingPlanName')]",
+      "type": "Microsoft.Web/serverfarms",
+      "location": "[parameters('location')]",
+      "tags": {
+        "displayName": "HostingPlan"
+      },
+      "sku": {
+        "name": "[parameters('skuName')]",
+        "capacity": "[parameters('skuCapacity')]"
+      },
+      "properties": {
+        "name": "[parameters('hostingPlanName')]"
+      }
+    },
+    {
+      "apiVersion": "2016-03-01",
+      "name": "[parameters('webSiteName')]",
+      "type": "Microsoft.Web/sites",
+      "location": "[parameters('location')]",
+      "dependsOn": [
+        "[parameters('hostingPlanName')]",
+        "[resourceId('Microsoft.Network/virtualNetworks', parameters('virtualNetworkName'))]",
+        "[resourceId('Microsoft.Sql/servers', parameters('sqlServerName'))]"
+      ],
+      "tags": {
+        "[concat('hidden-related:', resourceId('Microsoft.Web/serverfarms', parameters('hostingPlanName')))]": "empty",
+        "displayName": "Website"
+      },
+      "properties": {
+        "name": "[parameters('webSiteName')]",
+        "serverFarmId": "[resourceId('Microsoft.Web/serverfarms', parameters('hostingPlanName'))]"
+      },
+      "resources": [
+        {
+          "apiVersion": "2016-03-01",
+          "type": "config",
+          "name": "connectionstrings",
+          "dependsOn": [
+            "[parameters('webSiteName')]"
+          ],
+          "properties": {
+            "DefaultConnection": {
+              "value": "[concat('Data Source=tcp:', reference(concat('Microsoft.Sql/servers/', parameters('sqlServerName'))).fullyQualifiedDomainName, ',1433;Initial Catalog=', parameters('databaseName'), ';User Id=', parameters('sqlAdministratorLogin'), '@', reference(concat('Microsoft.Sql/servers/', parameters('sqlServerName'))).fullyQualifiedDomainName, ';Password=', parameters('sqlAdministratorLoginPassword'), ';')]",
+              "type": "SQLAzure"
+            }
+          }
+        },
+        {
+          "apiVersion": "2016-08-01",
+          "name": "web",
+          "type": "sourcecontrols",
+          "dependsOn": [
+            "[resourceId('Microsoft.Web/Sites', parameters('webSiteName'))]",
+            "[concat('Microsoft.Web/Sites/', parameters('webSiteName'), '/config/connectionstrings')]"
+          ],
+          "properties": {
+            "RepoUrl": "[parameters('repoURL')]",
+            "branch": "[parameters('branch')]",
+            "IsManualIntegration": true
+          }
+        }
+      ]
+    },
+    
+
+    {
+      "apiVersion": "2015-04-01",
+      "name": "[concat('ServerErrors ', parameters('webSiteName'))]",
+      "type": "Microsoft.Insights/alertrules",
+      "location": "[parameters('location')]",
+      "dependsOn": [
+        "[parameters('webSiteName')]"
+      ],
+      "tags": {
+        "[concat('hidden-link:', resourceId('Microsoft.Web/sites', parameters('webSiteName')))]": "Resource",
+        "displayName": "ServerErrorsAlertRule"
+      },
+      "properties": {
+        "name": "[concat('ServerErrors ', parameters('webSiteName'))]",
+        "description": "[concat(parameters('webSiteName'), ' has some server errors, status code 5xx.')]",
+        "isEnabled": false,
+        "condition": {
+          "odata.type": "Microsoft.Azure.Management.Insights.Models.ThresholdRuleCondition",
+          "dataSource": {
+            "odata.type": "Microsoft.Azure.Management.Insights.Models.RuleMetricDataSource",
+            "resourceUri": "[resourceId('Microsoft.Web/sites', parameters('webSiteName'))]",
+            "metricName": "Http5xx"
+          },
+          "operator": "GreaterThan",
+          "threshold": 0.0,
+          "windowSize": "PT5M"
+        },
+        "action": {
+          "odata.type": "Microsoft.Azure.Management.Insights.Models.RuleEmailAction",
+          "sendToServiceOwners": true,
+          "customEmails": []
+        }
+      }
+    },
+    {
+      "apiVersion": "2015-04-01",
+      "name": "[concat('ForbiddenRequests ', parameters('webSiteName'))]",
+      "type": "Microsoft.Insights/alertrules",
+      "location": "[parameters('location')]",
+      "dependsOn": [
+        "[parameters('webSiteName')]"
+      ],
+      "tags": {
+        "[concat('hidden-link:', resourceId('Microsoft.Web/sites', parameters('webSiteName')))]": "Resource",
+        "displayName": "ForbiddenRequestsAlertRule"
+      },
+      "properties": {
+        "name": "[concat('ForbiddenRequests ', parameters('webSiteName'))]",
+        "description": "[concat(parameters('webSiteName'), ' has some requests that are forbidden, status code 403.')]",
+        "isEnabled": false,
+        "condition": {
+          "odata.type": "Microsoft.Azure.Management.Insights.Models.ThresholdRuleCondition",
+          "dataSource": {
+            "odata.type": "Microsoft.Azure.Management.Insights.Models.RuleMetricDataSource",
+            "resourceUri": "[resourceId('Microsoft.Web/sites', parameters('webSiteName'))]",
+            "metricName": "Http403"
+          },
+          "operator": "GreaterThan",
+          "threshold": 0,
+          "windowSize": "PT5M"
+        },
+        "action": {
+          "odata.type": "Microsoft.Azure.Management.Insights.Models.RuleEmailAction",
+          "sendToServiceOwners": true,
+          "customEmails": []
+        }
+      }
+    },
+
+    {
+      "apiVersion": "2015-05-01",
+      "name": "[concat('AppInsights', parameters('webSiteName'))]",
+      "type": "Microsoft.Insights/components",
+      "location": "southcentralus",
+      "dependsOn": [
+        "[parameters('webSiteName')]"
+      ],
+      "tags": {
+        "[concat('hidden-link:', resourceId('Microsoft.Web/sites', parameters('webSiteName')))]": "Resource",
+        "displayName": "AppInsightsComponent"
+      },
+      "properties": {
+        "ApplicationId": "[parameters('webSiteName')]"
+      }
+    }
+  ],
+  "outputs": {
+    "siteUri": {
+      "type": "string",
+      "value": "[reference(concat('Microsoft.Web/sites/', parameters('webSiteName'))).hostnames[0]]"
+    },
+    "sqlSvrFqdn": {
+      "type": "string",
+      "value": "[reference(concat('Microsoft.Sql/servers/', parameters('sqlServerName'))).fullyQualifiedDomainName]"
+    }
+  }
+}
