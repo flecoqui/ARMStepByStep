@@ -71,3 +71,35 @@ For additional Windows samples, see [Windows Universal Samples on GitHub](https:
   <td><a href="Step_5_ARMTemplateApps/cs/DeployARMTemplate">.Net Core Sample Application to deploy ARM Templates</a></td>
    </tr>
 </table>
+
+
+<table>
+ <tr>
+  <th colspan="3" align="left">Step 6: Data Science Virtual Machine  Application</th>
+ </tr>
+ <tr>
+  <td><a href="Step_6_DataScienceVMTemplate/101-vm-data-science-ubuntu">Data Science Virtual Machine Sample template based on Microsoft Data Science VM</a></td>
+   </tr>
+</table>
+
+
+
+<table>
+ <tr>
+  <th colspan="3" align="left">Step 7: ASP.Net Core Application running in Container (AKS)</th>
+ </tr>
+ <tr>
+  <td><a href="Step_7_ASPDotNetCoreContainer/">ASP.Net Core Application running in Container in Azure Kubernetes Service (AKS)</a></td>
+   </tr>
+</table>
+
+
+<table>
+ <tr>
+  <th colspan="3" align="left">Step 8: Azure App Service using Azure SQL service, Azure Storage Account through a VNET with CI/CD deployment from github</th>
+ </tr>
+ <tr>
+  <td><a href="Step_8_WebSqlServiceCICDTemplate/201-web-sql-vnet-github-cicd/"> Azure App Service using Azure SQL service, Azure Storage Account through a VNET with CI/CD deployment from github</a></td>
+   </tr>
+</table>
+
