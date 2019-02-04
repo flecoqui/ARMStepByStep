@@ -85,7 +85,8 @@ For additional Windows samples, see [Windows Universal Samples on GitHub](https:
   <th colspan="3" align="left">Step 6: Data Science Virtual Machine  Application</th>
  </tr>
  <tr>
-  <td><a href="Step_6_DataScienceVMTemplate/101-vm-data-science-ubuntu">Data Science Virtual Machine Sample template based on Microsoft Data Science VM</a></td>
+  <td><a href="Step_6_DataScienceVMTemplate/101-vm-data-science-ubuntu">Data Science Virtual Machine Sample template based on Microsoft Data Science VM (Ubuntu)</a></td>
+    <td><a href="Step_6_DataScienceVMTemplate/101-vm-data-science-windows">Data Science Virtual Machine Sample template based on Microsoft Data Science VM (Windows)</a></td>
    </tr>
 </table>
 
