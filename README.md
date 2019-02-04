@@ -12,6 +12,13 @@ Moreover, it include a sample application which could be used to deploy ARM temp
 
 **Step 5 :** Sample .Net Core application to deploy any ARM template from your own management application.
 
+**Step 5 :** Data Science Virtual Machine Sample template based on Microsoft Data Science VM
+
+**Step 7 :** ASP.Net Core Application running in Container in Azure Kubernetes Service (AKS)
+
+**Step 8 :** Azure App Service using Azure SQL service, Azure Storage Account through a VNET with CI/CD deployment from github
+  
+
 For additional ARM Template samples, see [Azure Quickstart Templates](https://github.com/Azure/azure-quickstart-templates/). 
 
 ## See also
